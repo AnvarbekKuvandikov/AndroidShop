@@ -27,7 +27,7 @@
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="155dp"
+        android:layout_height="140dp"
         android:layout_below="@+id/searchView"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="4dp"
@@ -37,7 +37,7 @@
     </ListView>
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="90dp"
     android:orientation="vertical"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
@@ -45,7 +45,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="30dp"
         android:orientation="horizontal"
 
         android:background="@drawable/backgroun2"
@@ -57,7 +57,7 @@
             android:layout_height="30dp"
             android:text="@string/product"
             android:textAlignment="center"
-            />
+            android:textSize="18sp" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -101,7 +101,7 @@
             />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -113,7 +113,7 @@
             />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/calsel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

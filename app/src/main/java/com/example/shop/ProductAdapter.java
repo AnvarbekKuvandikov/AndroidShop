@@ -33,9 +33,12 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         ((TextView)convertView.findViewById(R.id.product_name)).setText(product.name);
         ((TextView)convertView.findViewById(R.id.product_prices)).setText("("+product.inprice+", "+product.price+")");
 
+        convertView.setTag(product);
         return convertView;
     }
-
+    /*
+    * Shuni ishlatish garak
+    * */
     @Override
     public Filter getFilter() {
         if(filter==null)
@@ -45,4 +48,5 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
         return filter;
     }
+
 }

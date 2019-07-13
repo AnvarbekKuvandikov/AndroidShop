@@ -2,7 +2,9 @@ package com.example.shop;
 import android.widget.Filter;
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+* Shuni ishlatish garak
+* */
 public class CustomFilter extends Filter {
 
     private ArrayList<Product> filterList;

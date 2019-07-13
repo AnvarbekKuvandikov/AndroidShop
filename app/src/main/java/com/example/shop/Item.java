@@ -2,30 +2,22 @@ package com.example.shop;
 
 public class Item {
      private Integer id;
-     private String Name;
+     private String name;
      private Integer count;
+     private Integer incount;
      private Integer price;
-     private Integer sum;
-    public Item(Integer id, String name, Integer count, Integer price, Integer sum) {
-        this.id = id;
-        Name = name;
-        this.count = count;
-        this.price = price;
-        this.sum = sum;
-    }
-
-    public Item(String name, Integer count, Integer price, Integer sum) {
-        Name = name;
-        this.count = count;
-        this.price = price;
-        this.sum = sum;
-    }
+     private Integer inprice;
 
     public Item() {
     }
 
-    public String getName() {
-        return Name;
+    public Item(Integer id, String name, Integer count, Integer incount, Integer price, Integer inprice) {
+        this.id = id;
+        this.name = name;
+        this.count = count;
+        this.incount = incount;
+        this.price = price;
+        this.inprice = inprice;
     }
 
     public Integer getId() {
@@ -36,8 +28,12 @@ public class Item {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public Integer getCount() {
@@ -48,6 +44,14 @@ public class Item {
         this.count = count;
     }
 
+    public Integer getIncount() {
+        return incount;
+    }
+
+    public void setIncount(Integer incount) {
+        this.incount = incount;
+    }
+
     public Integer getPrice() {
         return price;
     }
@@ -56,11 +60,23 @@ public class Item {
         this.price = price;
     }
 
-    public Integer getSum() {
-        return sum;
+    public Integer getInprice() {
+        return inprice;
     }
 
-    public void setSum(Integer sum) {
-        this.sum = sum;
+    public void setInprice(Integer inprice) {
+        this.inprice = inprice;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", count=" + count +
+                ", incount=" + incount +
+                ", price=" + price +
+                ", inprice=" + inprice +
+                '}';
     }
 }
