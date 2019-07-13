@@ -15,12 +15,14 @@ import java.util.List;
 public class ProductAdapter extends ArrayAdapter<Product> {
 
     public ArrayList<Product> list;
+    public ArrayList<Product> originalList = new ArrayList<>();
     private CustomFilter filter;
 
 
     public ProductAdapter( Context context, int resource, ArrayList<Product> products) {
         super(context, resource, products);
         list=products;
+        originalList.addAll(products);
     }
 
 
@@ -36,17 +38,14 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         convertView.setTag(product);
         return convertView;
     }
-    /*
-    * Shuni ishlatish garak
-    * */
+
     @Override
     public Filter getFilter() {
         if(filter==null)
         {
-            filter=new CustomFilter(list,this);
+            filter=new CustomFilter(originalList,this);
         }
 
         return filter;
     }
-
 }

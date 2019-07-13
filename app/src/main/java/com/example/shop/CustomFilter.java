@@ -2,9 +2,7 @@ package com.example.shop;
 import android.widget.Filter;
 import java.util.ArrayList;
 import java.util.List;
-/*
-* Shuni ishlatish garak
-* */
+
 public class CustomFilter extends Filter {
 
     private ArrayList<Product> filterList;
@@ -37,8 +35,8 @@ public class CustomFilter extends Filter {
             results.values=filteredMovies;
         }
         else {
-            results.count=filterList.size();
-            results.values=filterList;
+            results.count=adapter.originalList.size();
+            results.values=adapter.originalList;
         }
 
         return results;
@@ -47,7 +45,8 @@ public class CustomFilter extends Filter {
 
     @Override
     protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-        adapter.list= (ArrayList<Product>) filterResults.values;
+        adapter.clear();
+        adapter.addAll((ArrayList<Product>) filterResults.values);
         adapter.notifyDataSetChanged();
     }
 
