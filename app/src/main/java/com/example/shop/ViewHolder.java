@@ -6,7 +6,7 @@ import android.widget.TextView;
 public class ViewHolder  {
     TextView name;
     TextView count;
-    TextView price;
+    TextView incount;
     TextView sum;
     ImageView delete;
 }

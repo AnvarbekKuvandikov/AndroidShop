@@ -16,6 +16,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,10 +37,19 @@ public class MainActivity extends AppCompatActivity {
     private  Item selectedItem;
     private static Integer selectItemSum=0;
     private static Integer sum=0;
+
+    JdbcPlainTest jdbcPlainTest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        jdbcPlainTest=new JdbcPlainTest();
+        try {
+            jdbcPlainTest.ProductsSelectQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Log.v(TAG,"Hato");
+        }
         save=(ImageView)findViewById(R.id.save);
         calsel=(ImageView)findViewById(R.id.calsel);
 
@@ -116,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
                                             int price_product_count_int=Integer.parseInt(price_product_count.getText().toString());
                                             int price_inproduct_count_int=Integer.parseInt(price_inproduct_count.getText().toString());
+                                            Log.v(TAG,price_inproduct_count_int+" "+price_product_count_int);
                                             if(price_product_count_int>0 && price_inproduct_count_int>0) {
                                                 Log.v(TAG,"in 1:"+selectProduct.getName());
                                                 selectedItem.setId(selectProduct.getId());
@@ -130,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                                                 sum+=selectItemSum;
 
                                                 list2.add(selectedItem);
-//                                                adapter2.addAll(list2);
+
                                                 setProduct(null);
                                                 Log.v(TAG,"list2.size:"+list2.size());
 
@@ -148,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                                                 sum+=selectItemSum;
 
                                                 list2.add(selectedItem);
-//                                                adapter2.addAll(list2);
+
                                                 setProduct(null);
                                                 Log.v(TAG,"list2.size:"+list2.size());
 
@@ -164,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
                                                 selectItemSum=selectProduct.getInprice()*selectedItem.getIncount();
                                                 sum+=selectItemSum;
                                                 list2.add(selectedItem);
-//                                                adapter2.addAll(list2);
                                                 setProduct(null);
                                                 Log.v(TAG,"list2.size:"+list2.size());
                                             }
@@ -187,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
                             case DialogInterface.BUTTON_POSITIVE:
                                 for (int i = 0; i <list2.size() ; i++) {
                                     Log.v(TAG,list2.get(i).toString());
+                                    adapter.add(new Product(6,"Ha",23,23));
                                 }
                                 setProduct(null);
                                 break;
