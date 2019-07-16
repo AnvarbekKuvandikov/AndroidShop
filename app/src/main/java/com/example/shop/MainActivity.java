@@ -81,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
 //        list2.add(new AddItems(11,  "Ручка", 7, 1000, 7000));
 
 
-//        list2.add(new AddItems(452, 1,"anvar",5000,750,5,40));
+        list2.add(new AddItems(452, 1,"anvar",5000,750,5,40));
 //        adapter2 = new ItemAdapter(this, R.layout.list_item,list2);
-//        listView2.setAdapter(adapter2);
+        listView2.setAdapter(adapter2);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
