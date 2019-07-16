@@ -1,9 +1,9 @@
 package com.example.shop;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.nfc.Tag;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +16,10 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.sql.SQLException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
     private static Integer selectItemSum=0;
     private static Integer sum=0;
 
+    private ProgressDialog progressDialog;
+    private static String urlProducts="http://192.168.43.52:8080/application/json/products";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,11 +63,12 @@ public class MainActivity extends AppCompatActivity {
         list = new ArrayList<>();
         list2 = new ArrayList<>();
 
+        new GetProducts().execute();
 //        list.add(new Product(1,"Дафтар",7000,700));
 //        list.add(new Product(2,"Сигарет",9000,500));
 //        list.add(new Product(3,"Сув",18000,1500));
 
-//        list2.add(new Item(1,  "Ручка", 7, 1000, 7000));
+//        list2.add(new Item(1, "Ручка", 7, 0, 14000,700 ));
 //        list2.add(new Item(2,  "Ручка", 7, 1000, 7000));
 //        list2.add(new Item(3,  "Ручка", 7, 1000, 7000));
 //        list2.add(new Item(4,  "Ручка", 7, 1000, 7000));
@@ -73,11 +80,8 @@ public class MainActivity extends AppCompatActivity {
 //        list2.add(new Item(10,  "Ручка", 7, 1000, 7000));
 //        list2.add(new Item(11,  "Ручка", 7, 1000, 7000));
 
-        adapter = new ProductAdapter(this,R.layout.products_item,list);
-        adapter2 = new ItemAdapter(this, R.layout.list_item,list2);
-
-        listView.setAdapter(adapter);
-        listView2.setAdapter(adapter2);
+//        adapter2 = new ItemAdapter(this, R.layout.list_item,list2);
+//        listView2.setAdapter(adapter2);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -227,4 +231,83 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private class GetProducts extends AsyncTask<Void, Void, Void> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog=new ProgressDialog(MainActivity.this);
+            progressDialog.setMessage("Малумот юкланяпти");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HttpHandler httpHandler=new HttpHandler();
+            String jsonStr=httpHandler.makeServiceCall(urlProducts);
+            Log.v(TAG,"URL:"+urlProducts);
+            if(jsonStr != null) {
+                try {
+                    JSONArray jsonArray = new JSONArray(jsonStr);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        Product product = new Product();
+                        JSONObject object = jsonArray.getJSONObject(i);
+
+                                /*
+                                "id": 1,
+                                "productId": 2,
+                                "nameShort": "anvar",
+                                "count": 4,
+                                "incount": 5,
+                                "price": 6,
+                                "inprice": 7
+                                */
+                        product.setPutId(object.getInt("id"));
+                        product.setId(object.getInt("productId"));
+                        product.setName(object.getString("nameShort"));
+                        product.setCount(object.getInt("count"));
+                        product.setIncount(object.getInt("incount"));
+                        product.setPrice(object.getInt("price"));
+                        product.setInprice(object.getInt("inprice"));
+                        list.add(product);
+
+                    }
+                } catch (final JSONException e) {
+                    Log.v("MyTag2", e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "Хатолик юз берди", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+
+            }
+            else{
+                Log.v("MyTag2", "serverdan galmadi");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this,"Сервер билан муамо бор",Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(progressDialog.isShowing()){
+                progressDialog.dismiss();
+            }
+            adapter = new ProductAdapter(MainActivity.this,R.layout.products_item,list);
+            listView.setAdapter(adapter);
+
+
+        }
+    }
 }

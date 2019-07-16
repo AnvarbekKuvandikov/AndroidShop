@@ -1,10 +1,13 @@
 package com.example.shop;
 
 public class Product {
+    Integer putId;
     Integer id;
     String name;
     Integer price;
     Integer inprice;
+    private Integer count;
+    private Integer incount;
 
     public Product() {
     }
@@ -26,6 +29,29 @@ public class Product {
         this.inprice = inprice;
     }
 
+    public Integer getPutId() {
+        return putId;
+    }
+
+    public void setPutId(Integer putId) {
+        this.putId = putId;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public Integer getIncount() {
+        return incount;
+    }
+
+    public void setIncount(Integer incount) {
+        this.incount = incount;
+    }
 
     public Integer getId() {
         return id;
