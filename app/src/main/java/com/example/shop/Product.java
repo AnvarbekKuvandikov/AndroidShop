@@ -95,4 +95,17 @@ public class Product {
     public void setInprice(Integer inprice) {
         this.inprice = inprice;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "putId=" + putId +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", inprice=" + inprice +
+                ", count=" + count +
+                ", incount=" + incount +
+                '}';
+    }
 }

@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private ListView listView2;
     private ArrayList<Product> list;
-    private ArrayList<Product> list2;
+    private ArrayList<AddItems> list2;
     private ProductAdapter adapter;
     private ItemAdapter adapter2;
     private ImageView save;
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText price_product_count;
     private EditText price_inproduct_count;
     private Product selectProduct;
-    private Product selectedItem;
+    private AddItems selectedItem;
     private static Integer selectItemSum=0;
     private static Integer sum=0;
 
@@ -63,27 +63,27 @@ public class MainActivity extends AppCompatActivity {
         list = new ArrayList<>();
         list2 = new ArrayList<>();
 
-        list2.add(new Product(452, 1,"anvar",5000,750,5,40));
-        adapter2 = new ItemAdapter(this, R.layout.list_item,list2);
-        listView2.setAdapter(adapter2);
         new GetProducts().execute();
 //        list.add(new Product(1,"Дафтар",7000,700));
 //        list.add(new Product(2,"Сигарет",9000,500));
 //        list.add(new Product(3,"Сув",18000,1500));
 
-//        list2.add(new Item(1, "Ручка", 7, 0, 14000,700 ));
-//        list2.add(new Item(2,  "Ручка", 7, 1000, 7000));
-//        list2.add(new Item(3,  "Ручка", 7, 1000, 7000));
-//        list2.add(new Item(4,  "Ручка", 7, 1000, 7000));
-//        list2.add(new Item(5,  "Ручка", 7, 1000, 7000));
-//        list2.add(new Item(6,  "Ручка", 7, 1000, 7000));
-//        list2.add(new Item(7,  "Ручка", 7, 1000, 7000));
-//        list2.add(new Item(8,  "Ручка", 7, 1000, 7000));
-//        list2.add(new Item(9,  "Ручка", 7, 1000, 7000));
-//        list2.add(new Item(10,  "Ручка", 7, 1000, 7000));
-//        list2.add(new Item(11,  "Ручка", 7, 1000, 7000));
+//        list2.add(new AddItems(1, "Ручка", 7, 0, 14000,700 ));
+//        list2.add(new AddItems(2,  "Ручка", 7, 1000, 7000));
+//        list2.add(new AddItems(3,  "Ручка", 7, 1000, 7000));
+//        list2.add(new AddItems(4,  "Ручка", 7, 1000, 7000));
+//        list2.add(new AddItems(5,  "Ручка", 7, 1000, 7000));
+//        list2.add(new AddItems(6,  "Ручка", 7, 1000, 7000));
+//        list2.add(new AddItems(7,  "Ручка", 7, 1000, 7000));
+//        list2.add(new AddItems(8,  "Ручка", 7, 1000, 7000));
+//        list2.add(new AddItems(9,  "Ручка", 7, 1000, 7000));
+//        list2.add(new AddItems(10,  "Ручка", 7, 1000, 7000));
+//        list2.add(new AddItems(11,  "Ручка", 7, 1000, 7000));
 
 
+//        list2.add(new AddItems(452, 1,"anvar",5000,750,5,40));
+//        adapter2 = new ItemAdapter(this, R.layout.list_item,list2);
+//        listView2.setAdapter(adapter2);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                         if(selectProduct!=null){
-                                            selectedItem=new Product();
+                                            selectedItem=new AddItems();
 
                                             int price_product_count_int=Integer.parseInt(price_product_count.getText().toString());
                                             int price_inproduct_count_int=Integer.parseInt(price_inproduct_count.getText().toString());
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                             case DialogInterface.BUTTON_POSITIVE:
                                 for (int i = 0; i <list2.size() ; i++) {
                                     Log.v(TAG,list2.get(i).toString());
-                                    adapter2.add(new Product(452, 1,"anvar",5000,750,5,40));
+                                    adapter2.add(new AddItems(452, 1,"anvar",5000,750,5,40));
                                 }
                                 setProduct(null);
                                 break;
