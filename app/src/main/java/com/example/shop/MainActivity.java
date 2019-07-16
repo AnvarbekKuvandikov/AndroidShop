@@ -29,15 +29,15 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private ListView listView2;
     private ArrayList<Product> list;
-    private ArrayList<Item> list2;
+    private ArrayList<Product> list2;
     private ProductAdapter adapter;
     private ItemAdapter adapter2;
     private ImageView save;
     private ImageView calsel;
     private EditText price_product_count;
     private EditText price_inproduct_count;
-    private  Product selectProduct;
-    private  Item selectedItem;
+    private Product selectProduct;
+    private Product selectedItem;
     private static Integer selectItemSum=0;
     private static Integer sum=0;
 
@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
         list = new ArrayList<>();
         list2 = new ArrayList<>();
 
+        list2.add(new Product(452, 1,"anvar",5000,750,5,40));
+        adapter2 = new ItemAdapter(this, R.layout.list_item,list2);
+        listView2.setAdapter(adapter2);
         new GetProducts().execute();
 //        list.add(new Product(1,"Дафтар",7000,700));
 //        list.add(new Product(2,"Сигарет",9000,500));
@@ -80,8 +83,7 @@ public class MainActivity extends AppCompatActivity {
 //        list2.add(new Item(10,  "Ручка", 7, 1000, 7000));
 //        list2.add(new Item(11,  "Ручка", 7, 1000, 7000));
 
-//        adapter2 = new ItemAdapter(this, R.layout.list_item,list2);
-//        listView2.setAdapter(adapter2);
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Product product=(Product)view.getTag();
                         setProduct(product);
-                        Log.v(TAG,product.getName()+" "+selectProduct.name);
+                        Log.v(TAG,product.getName()+" "+selectProduct.getName());
                     }
                 }
         );
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                         if(selectProduct!=null){
-                                            selectedItem=new Item();
+                                            selectedItem=new Product();
 
                                             int price_product_count_int=Integer.parseInt(price_product_count.getText().toString());
                                             int price_inproduct_count_int=Integer.parseInt(price_inproduct_count.getText().toString());
@@ -136,9 +138,6 @@ public class MainActivity extends AppCompatActivity {
 
                                                 selectItemSum=(selectProduct.getPrice()*selectedItem.getCount()+selectProduct.getInprice()*selectedItem.getIncount());
                                                 sum+=selectItemSum;
-
-                                                list2.add(selectedItem);
-
                                                 setProduct(null);
                                                 Log.v(TAG,"list2.size:"+list2.size());
 
@@ -194,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                             case DialogInterface.BUTTON_POSITIVE:
                                 for (int i = 0; i <list2.size() ; i++) {
                                     Log.v(TAG,list2.get(i).toString());
-                                    adapter.add(new Product(6,"Ha",23,23));
+                                    adapter2.add(new Product(452, 1,"anvar",5000,750,5,40));
                                 }
                                 setProduct(null);
                                 break;

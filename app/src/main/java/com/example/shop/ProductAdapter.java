@@ -32,8 +32,8 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         LayoutInflater inflater =LayoutInflater.from(getContext());
         convertView=inflater.inflate(R.layout.products_item, parent, false);
 
-        ((TextView)convertView.findViewById(R.id.product_name)).setText(product.name);
-        ((TextView)convertView.findViewById(R.id.product_prices)).setText("("+product.inprice+", "+product.price+")");
+        ((TextView)convertView.findViewById(R.id.product_name)).setText(product.getName());
+        ((TextView)convertView.findViewById(R.id.product_prices)).setText("("+product.getInprice()+", "+product.getPrice()+")");
 
         convertView.setTag(product);
         return convertView;

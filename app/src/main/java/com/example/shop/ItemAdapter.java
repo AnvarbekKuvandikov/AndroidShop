@@ -13,46 +13,33 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemAdapter extends ArrayAdapter<Item> {
-    private ArrayList<Item> items;
-    public ItemAdapter(Context context, int resource,  ArrayList<Item> items) {
+public class ItemAdapter extends ArrayAdapter<Product> {
+    private ArrayList<Product> items;
+    private Context context;
+    private int resource;
+    public ItemAdapter(Context context, int resource,  ArrayList<Product> items) {
         super(context, resource, items);
         this.items=items;
+        this.context=context;
+        this.resource=resource;
     }
 
-
-    @SuppressLint("StringFormatInvalid")
     @Override
     public View getView(int position, View convertView,  ViewGroup parent) {
 //        return super.getView(position, convertView, parent);
-        Item item=getItem(position);
-        ViewHolder viewHolder;
-        LayoutInflater inflater=LayoutInflater.from(getContext());
+        Product product=getItem(position);
+        LayoutInflater inflater =LayoutInflater.from(getContext());
         convertView=inflater.inflate(R.layout.list_item, parent, false);
 
-        if(convertView==null){
-            viewHolder=new ViewHolder();
-            viewHolder.name=(TextView) convertView.findViewById(R.id.name);
-            viewHolder.count=(TextView) convertView.findViewById(R.id.count);
-            viewHolder.incount=(TextView) convertView.findViewById(R.id.incount);
-            viewHolder.sum=(TextView) convertView.findViewById(R.id.sum);
-            viewHolder.delete=(ImageView) convertView.findViewById(R.id.delete);
-            convertView.setTag(viewHolder);
-        }
-        else{
-            viewHolder=(ViewHolder) convertView.getTag();
-            ((TextView)convertView.findViewById(R.id.name)).setText(item.getName());
-            ((TextView)convertView.findViewById(R.id.count)).setText(item.getCount());
-            ((TextView)convertView.findViewById(R.id.incount)).setText(item.getIncount());
-            ((TextView)convertView.findViewById(R.id.sum)).setText(item.getPrice()+item.getInprice());
+        ((TextView)convertView.findViewById(R.id.item_name)).setText(product.getName());
+        ((TextView)convertView.findViewById(R.id.item_count)).setText(product.getCount());
+        ((TextView)convertView.findViewById(R.id.item_incount)).setText(product.getIncount());
+        ((TextView)convertView.findViewById(R.id.item_sum)).setText(product.getCount()*product.getPrice()+ product.getCount()*product.getInprice());
 
-        }
-
-        convertView.setTag(item);
+        convertView.setTag(product);
         return convertView;
 
-
-
     }
+
 
 }
