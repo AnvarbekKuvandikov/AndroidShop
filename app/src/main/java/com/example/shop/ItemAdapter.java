@@ -22,17 +22,17 @@ public class ItemAdapter extends ArrayAdapter<AddItems> {
     private int resource;
 
     public ItemAdapter(Context context, int resource, ArrayList<AddItems> items) {
-        super(context, resource);
+        super(context, resource,items);
         this.items = items;
         this.context = context;
         this.resource = resource;
     }
 
 
-
     @Override
     public View getView(int position, View convertView,  ViewGroup parent) {
 //        return super.getView(position, convertView, parent);
+
         AddItems item=getItem(position);
         Log.v("MyLog2",item.getId().toString());
         Log.v("MyLog2",item.getName());
@@ -42,21 +42,25 @@ public class ItemAdapter extends ArrayAdapter<AddItems> {
         }
 
        if(item!=null) {
+        Log.v("MyLog2",((TextView)convertView.findViewById(R.id.item_name)).getText().toString());
            TextView itemName=(TextView) convertView.findViewById(R.id.item_name);
            TextView itemCount=(TextView) convertView.findViewById(R.id.item_count);
            TextView  itemIncount=(TextView) convertView.findViewById(R.id.item_incount);
            TextView  itemSum=(TextView) convertView.findViewById(R.id.item_sum);
            if(itemName!=null)
-               itemName.setText(item.getName());
+               itemName.setText("anvar");
            if(itemCount!=null)
-               itemCount.setText(item.getCount());
+               itemCount.setText(3);
            if (itemIncount!=null)
-               itemIncount.setText(item.getIncount());
+               itemIncount.setText(15);
            if(itemSum!=null)
-               itemSum.setText(0);
+               itemSum.setText(1223);
+
        }
-        convertView.setTag(item);
-        return convertView;
+
+       convertView.setTag(item);
+       return convertView;
+
     }
 
 

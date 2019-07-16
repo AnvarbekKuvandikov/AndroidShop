@@ -81,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
 //        list2.add(new AddItems(11,  "Ручка", 7, 1000, 7000));
 
 
-        list2.add(new AddItems(452, 1,"anvar",5000,750,5,40));
+//        list2.add(new AddItems(452, 1,"anvar",5000,750,5,40));
 //        adapter2 = new ItemAdapter(this, R.layout.list_item,list2);
-        listView2.setAdapter(adapter2);
+//        listView2.setAdapter(adapter2);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -123,9 +123,12 @@ public class MainActivity extends AppCompatActivity {
                                         if(selectProduct!=null){
                                             selectedItem=new AddItems();
 
-                                            int price_product_count_int=Integer.parseInt(price_product_count.getText().toString());
-                                            int price_inproduct_count_int=Integer.parseInt(price_inproduct_count.getText().toString());
+
+                                            int price_product_count_int=tryParse(price_product_count.getText().toString());
+                                            int price_inproduct_count_int=tryParse(price_inproduct_count.getText().toString());
+
                                             Log.v(TAG,price_inproduct_count_int+" "+price_product_count_int);
+
                                             if(price_product_count_int>0 && price_inproduct_count_int>0) {
                                                 Log.v(TAG,"in 1:"+selectProduct.getName());
                                                 selectedItem.setId(selectProduct.getId());
@@ -138,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
                                                 selectItemSum=(selectProduct.getPrice()*selectedItem.getCount()+selectProduct.getInprice()*selectedItem.getIncount());
                                                 sum+=selectItemSum;
+                                                list2.add(selectedItem);
                                                 setProduct(null);
                                                 Log.v(TAG,"list2.size:"+list2.size());
 
@@ -175,8 +179,11 @@ public class MainActivity extends AppCompatActivity {
                                                 Log.v(TAG,"list2.size:"+list2.size());
                                             }
                                             else{
-                                                Toast.makeText(MainActivity.this,"Сонини киритинг !!!",Toast.LENGTH_LONG);
+                                                Toast.makeText(MainActivity.this,"Сонини киритинг !!!",Toast.LENGTH_LONG).show();
                                             }
+                                        }
+                                        else{
+                                            Toast.makeText(MainActivity.this,"Махсулотни танланг",Toast.LENGTH_LONG).show();
                                         }
 
 
@@ -193,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                             case DialogInterface.BUTTON_POSITIVE:
                                 for (int i = 0; i <list2.size() ; i++) {
                                     Log.v(TAG,list2.get(i).toString());
-                                    adapter2.add(new AddItems(452, 1,"anvar",5000,750,5,40));
+//                                    adapter2.add(new AddItems(452, 1,"anvar",5000,750,5,40));
                                 }
                                 setProduct(null);
                                 break;
@@ -227,6 +234,16 @@ public class MainActivity extends AppCompatActivity {
         price_product_count.getText().clear();
         price_inproduct_count.getText().clear();
 
+    }
+
+    public Integer tryParse(Object obj) {
+        Integer retVal;
+        try {
+            retVal = Integer.parseInt((String) obj);
+        } catch (NumberFormatException nfe) {
+            retVal = 0; // or null if that is your preference
+        }
+        return retVal;
     }
 
 
