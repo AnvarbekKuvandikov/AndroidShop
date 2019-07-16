@@ -38,18 +38,11 @@ public class MainActivity extends AppCompatActivity {
     private static Integer selectItemSum=0;
     private static Integer sum=0;
 
-    JdbcPlainTest jdbcPlainTest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        jdbcPlainTest=new JdbcPlainTest();
-        try {
-            jdbcPlainTest.ProductsSelectQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Log.v(TAG,"Hato");
-        }
+
         save=(ImageView)findViewById(R.id.save);
         calsel=(ImageView)findViewById(R.id.calsel);
 
@@ -64,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
         list = new ArrayList<>();
         list2 = new ArrayList<>();
 
-        list.add(new Product(1,"Дафтар",7000,700));
-        list.add(new Product(2,"Сигарет",9000,500));
-        list.add(new Product(3,"Сув",18000,1500));
+//        list.add(new Product(1,"Дафтар",7000,700));
+//        list.add(new Product(2,"Сигарет",9000,500));
+//        list.add(new Product(3,"Сув",18000,1500));
 
 //        list2.add(new Item(1,  "Ручка", 7, 1000, 7000));
 //        list2.add(new Item(2,  "Ручка", 7, 1000, 7000));
