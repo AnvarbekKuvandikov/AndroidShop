@@ -4,8 +4,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private ListView listView2;
     private ArrayList<Product> list;
-    private ArrayList<AddItems> list2;
+    private ArrayList<Product> list2;
     private ProductAdapter adapter;
     private ItemAdapter adapter2;
     private ImageView save;
@@ -37,12 +37,13 @@ public class MainActivity extends AppCompatActivity {
     private EditText price_product_count;
     private EditText price_inproduct_count;
     private Product selectProduct;
-    private AddItems selectedItem;
+    private Product selectedItem;
     private static Integer selectItemSum=0;
     private static Integer sum=0;
 
     private ProgressDialog progressDialog;
-    private static String urlProducts="http://192.168.43.52:8080/application/json/products";
+    private static String urlProducts="http://192.168.43.57:8080/application/json/products";
+    private static String urlAsos="http://192.168.43.57:8080/application/json/asos";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,26 +65,9 @@ public class MainActivity extends AppCompatActivity {
         list2 = new ArrayList<>();
 
         new GetProducts().execute();
-//        list.add(new Product(1,"Дафтар",7000,700));
-//        list.add(new Product(2,"Сигарет",9000,500));
-//        list.add(new Product(3,"Сув",18000,1500));
 
-//        list2.add(new AddItems(1, "Ручка", 7, 0, 14000,700 ));
-//        list2.add(new AddItems(2,  "Ручка", 7, 1000, 7000));
-//        list2.add(new AddItems(3,  "Ручка", 7, 1000, 7000));
-//        list2.add(new AddItems(4,  "Ручка", 7, 1000, 7000));
-//        list2.add(new AddItems(5,  "Ручка", 7, 1000, 7000));
-//        list2.add(new AddItems(6,  "Ручка", 7, 1000, 7000));
-//        list2.add(new AddItems(7,  "Ручка", 7, 1000, 7000));
-//        list2.add(new AddItems(8,  "Ручка", 7, 1000, 7000));
-//        list2.add(new AddItems(9,  "Ручка", 7, 1000, 7000));
-//        list2.add(new AddItems(10,  "Ручка", 7, 1000, 7000));
-//        list2.add(new AddItems(11,  "Ручка", 7, 1000, 7000));
-
-
-//        list2.add(new AddItems(452, 1,"anvar",5000,750,5,40));
-//        adapter2 = new ItemAdapter(this, R.layout.list_item,list2);
-//        listView2.setAdapter(adapter2);
+        adapter2 = new ItemAdapter(this, R.layout.list_item,list2);
+        listView2.setAdapter(adapter2);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -121,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                         if(selectProduct!=null){
-                                            selectedItem=new AddItems();
+                                            selectedItem=new Product();
 
 
                                             int price_product_count_int=tryParse(price_product_count.getText().toString());
@@ -170,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
                                                 selectedItem.setPrice(selectProduct.getPrice());
                                                 selectedItem.setInprice(selectProduct.getInprice());
 
-                                                selectedItem.setIncount(price_product_count_int);
+                                                selectedItem.setIncount(price_inproduct_count_int);
                                                 selectedItem.setCount(0);
                                                 selectItemSum=selectProduct.getInprice()*selectedItem.getIncount();
                                                 sum+=selectItemSum;
@@ -198,10 +182,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                for (int i = 0; i <list2.size() ; i++) {
-                                    Log.v(TAG,list2.get(i).toString());
-//                                    adapter2.add(new AddItems(452, 1,"anvar",5000,750,5,40));
-                                }
                                 setProduct(null);
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:

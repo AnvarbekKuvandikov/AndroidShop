@@ -6,11 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ProductAdapter extends ArrayAdapter<Product> {
 
@@ -33,7 +31,8 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         convertView=inflater.inflate(R.layout.products_item, parent, false);
 
         ((TextView)convertView.findViewById(R.id.product_name)).setText(product.getName());
-        ((TextView)convertView.findViewById(R.id.product_prices)).setText("("+product.getInprice()+", "+product.getPrice()+")");
+        ((TextView)convertView.findViewById(R.id.product_prices)).setText("Нархи: "+product.getPrice()+" Сўм");
+        ((TextView)convertView.findViewById(R.id.product_inprices)).setText("Ич.нархи: "+product.getInprice()+" Сўм");
 
         convertView.setTag(product);
         return convertView;

@@ -1,10 +1,8 @@
 
 package com.example.shop;
-import android.nfc.Tag;
-import android.util.Log;
 import android.widget.Filter;
+
 import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class CustomFilter extends Filter {
@@ -38,7 +36,9 @@ public class CustomFilter extends Filter {
             if(!begin.isEmpty() && !end.isEmpty() ) {
 //                Log.v("MyLog", begin + " " + end);
                 for(int i=0;i<filterList.size();i++) {
-                    if(filterList.get(i).getName().toUpperCase().indexOf(begin)==0 && filterList.get(i).getName().toUpperCase().contains(end) ) {
+                    int index1=filterList.get(i).getName().toUpperCase().indexOf(begin);
+                    int index2=filterList.get(i).getName().toUpperCase().indexOf(end);
+                    if(index1>=0 && index2>index1) {
 //                    Log.v("MyLog", String.valueOf(filterList.get(i).getName().toUpperCase().contains(end)));
                         filteredMovies.add(filterList.get(i));
                     }
@@ -47,7 +47,7 @@ public class CustomFilter extends Filter {
 
             else {
                 for (int i = 0; i < filterList.size(); i++) {
-                    if (filterList.get(i).getName().toUpperCase().indexOf((String) charSequence) == 0) {
+                    if (filterList.get(i).getName().toUpperCase().contains(charSequence)) {
                         filteredMovies.add(filterList.get(i));
                     }
                 }
