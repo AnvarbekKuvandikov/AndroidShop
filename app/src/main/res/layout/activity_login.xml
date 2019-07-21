@@ -13,19 +13,32 @@
         android:id="@+id/ipadress"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_margin="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="50dp"
         android:autofillHints=""
         android:background="@drawable/backgroun"
         android:ems="10"
         android:hint="@string/ip_input"
         android:inputType="textFilter"
-        android:padding="10dp" />
+        android:padding="10dp"
+        tools:targetApi="o" />
+    <TextView
+        android:id="@+id/ipmessage"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_margin="10dp"
+        android:text="@string/invalid_ip"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:visibility="invisible" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/loginEdt"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="50dp"
+        android:layout_marginTop="30dp"
         android:layout_marginRight="50dp"
         android:layout_marginBottom="10dp"
         android:autofillHints=""
@@ -33,10 +46,11 @@
         android:ems="10"
         android:hint="@string/username"
         android:inputType="text"
-        android:padding="10dp" />
+        android:padding="10dp"
+        tools:targetApi="o" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/passwordEdt"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="50dp"
@@ -48,10 +62,10 @@
         android:hint="@string/password"
         android:importantForAutofill="no"
         android:inputType="textPassword"
-        android:padding="10dp" />
+        android:padding="10dp" tools:targetApi="o"/>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/logInBtn"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="50dp"
@@ -62,13 +76,13 @@
         android:text="@string/action_sign_in" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_margin="10dp"
         android:text="@string/invalid_password"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
-        android:visibility="visible" />
+        android:visibility="invisible" />
 
 </LinearLayout>

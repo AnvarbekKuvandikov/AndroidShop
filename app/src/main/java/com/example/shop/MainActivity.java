@@ -3,6 +3,7 @@ package com.example.shop;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -41,9 +42,14 @@ public class MainActivity extends AppCompatActivity {
     private static Integer selectItemSum=0;
     private static Integer sum=0;
 
+    private static User thisuUser;
+
     private ProgressDialog progressDialog;
-    private static String urlProducts="http://192.168.43.57:8080/application/json/products";
-    private static String urlAsos="http://192.168.43.57:8080/application/json/asos";
+    private static String urlProducts="http://192.168.43.52:8080/application/json/products";
+    private static String ip="192.168.43.57";
+    private static String urlAsos="http://192.168.43.52:8080/application/json/asos";
+
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +69,12 @@ public class MainActivity extends AppCompatActivity {
 
         list = new ArrayList<>();
         list2 = new ArrayList<>();
+        intent=getIntent();
+        thisuUser=(User)intent.getSerializableExtra("user");
+        ip=intent.getStringExtra("ip");
 
+        Log.v(TAG,thisuUser.getId().toString());
+        Log.v(TAG,intent.getStringExtra("ip"));
         new GetProducts().execute();
 
         adapter2 = new ItemAdapter(this, R.layout.list_item,list2);
@@ -262,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
                                 */
                         product.setPutId(object.getInt("id"));
                         product.setId(object.getInt("productId"));
-                        product.setName(object.getString("nameShort"));
+                        product.setName(object.getString("name"));
                         product.setCount(object.getInt("count"));
                         product.setIncount(object.getInt("incount"));
                         product.setPrice(object.getInt("price"));
