@@ -8,40 +8,40 @@
     android:orientation="vertical">
 
 
-    <SearchView
-        android:id="@+id/searchView"
-        android:background="@drawable/backgroun"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="4dp"
-        android:queryHint="Qidirish"
-        android:textColor="@color/colorPrimary"
-        android:iconifiedByDefault="false"
-        android:layout_alignParentTop="true"
+  <SearchView
+      android:id="@+id/searchView"
+      android:background="@drawable/backgroun"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="8dp"
+      android:layout_marginTop="4dp"
+      android:layout_marginRight="8dp"
+      android:layout_marginBottom="4dp"
+      android:queryHint="Qidirish"
+      android:textColor="@color/colorPrimary"
+      android:iconifiedByDefault="false"
+      android:layout_alignParentTop="true"
 
-    />
+      />
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_below="@+id/searchView"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="4dp">
+  <ListView
+      android:id="@+id/listView"
+      android:layout_width="match_parent"
+      android:layout_height="140dp"
+      android:layout_below="@+id/searchView"
+      android:layout_marginLeft="8dp"
+      android:layout_marginTop="4dp"
+      android:layout_marginRight="8dp"
+      android:layout_marginBottom="4dp">
 
-    </ListView>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="90dp"
-    android:orientation="vertical"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    >
+  </ListView>
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="90dp"
+      android:orientation="vertical"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,13 +51,13 @@
         android:background="@drawable/backgroun2"
         >
 
-        <TextView
-            android:id="@+id/select_product"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:text="@string/product"
-            android:textAlignment="center"
-            android:textSize="18sp" />
+      <TextView
+          android:id="@+id/select_product"
+          android:layout_width="match_parent"
+          android:layout_height="30dp"
+          android:text="@string/product"
+          android:textAlignment="center"
+          android:textSize="18sp" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -66,77 +66,77 @@
         android:background="@drawable/backgroun2"
         >
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="55dp"
-            android:layout_height="30dp"
-            android:text="Асосий:" />
+      <TextView
+          android:id="@+id/textView"
+          android:layout_width="55dp"
+          android:layout_height="30dp"
+          android:text="Асосий:" />
 
-        <EditText
-            android:id="@+id/price_product_count"
-            android:layout_width="60dp"
-            android:layout_height="50dp"
-            android:ems="10"
-            android:inputType="numberSigned"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            />
+      <EditText
+          android:id="@+id/price_product_count"
+          android:layout_width="60dp"
+          android:layout_height="50dp"
+          android:ems="10"
+          android:inputType="numberSigned"
+          android:layout_marginRight="10dp"
+          android:layout_marginTop="4dp"
+          android:layout_marginBottom="4dp"
+          />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="35dp"
-            android:layout_height="40dp"
-            android:text="Ички" />
+      <TextView
+          android:id="@+id/textView2"
+          android:layout_width="35dp"
+          android:layout_height="40dp"
+          android:text="Ички" />
 
-        <EditText
-            android:id="@+id/price_inproduct_count"
-            android:layout_width="60dp"
-            android:layout_height="50dp"
-            android:ems="10"
-            android:inputType="number"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            />
+      <EditText
+          android:id="@+id/price_inproduct_count"
+          android:layout_width="60dp"
+          android:layout_height="50dp"
+          android:ems="10"
+          android:inputType="number"
+          android:layout_marginRight="10dp"
+          android:layout_marginTop="4dp"
+          android:layout_marginBottom="4dp"
+          />
 
-        <ImageView
-            android:id="@+id/save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@android:drawable/ic_menu_save"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            />
+      <ImageView
+          android:id="@+id/save"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          app:srcCompat="@android:drawable/ic_menu_save"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+          android:layout_marginLeft="4dp"
+          android:layout_marginRight="4dp"
+          />
 
-        <ImageView
-            android:id="@+id/calsel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@android:drawable/ic_delete"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
+      <ImageView
+          android:id="@+id/calsel"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          app:srcCompat="@android:drawable/ic_delete"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+          android:layout_marginLeft="4dp"
+          android:layout_marginRight="4dp"
 
-            />
+          />
     </LinearLayout>
 
-</LinearLayout>
-    <ListView
-        android:id="@+id/listView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/searchView"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="4dp"
-        android:paddingBottom="8dp" />
+  </LinearLayout>
+  <ListView
+      android:id="@+id/listView2"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/searchView"
+      android:layout_marginLeft="8dp"
+      android:layout_marginTop="4dp"
+      android:layout_marginRight="8dp"
+      android:layout_marginBottom="4dp"
+      android:paddingBottom="8dp" />
 
 
 </LinearLayout>

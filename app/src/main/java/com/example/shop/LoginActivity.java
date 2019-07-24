@@ -30,6 +30,8 @@ public class LoginActivity extends AppCompatActivity {
     private User thisUser;
     private ProgressDialog progressDialog;
 
+    private Integer  asosId;
+
     private static String urlLogin="http://192.168.1.1:8080/application/json/user";
 
 
@@ -159,6 +161,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+
     private class getUserCheck extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -202,6 +205,18 @@ public class LoginActivity extends AppCompatActivity {
                     thisUser.setUserpass(jsonObject.getString("userpass"));
                     thisUser.setFio(jsonObject.getString("fio"));
                     thisUser.setDelFlag(jsonObject.getInt("delFlag"));
+                    Log.v("MyLog","Ah sani");
+
+                    if (thisUser.getId()!=null) {
+                        String urlPostAsos = "http://" + ipadress.getText().toString() + ":8080/application/json/asos";
+                        Log.v("MyLog", urlPostAsos);
+                        String jsonAsosStr=httpHandler.makeServiceCreateAsos(urlPostAsos, thisUser);
+                        JSONObject jsonAsos=new JSONObject(jsonAsosStr);
+                        if(!jsonObject.isNull("id")){
+                            asosId=jsonAsos.getInt("id");
+                        }
+
+                    }
 
                 } catch (final JSONException e) {
                     Log.v("MyTag2", e.getMessage());
@@ -229,10 +244,15 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
+            if(progressDialog.isShowing()){
+                progressDialog.dismiss();
+            }
             if (thisUser.getId()!=null) {
+                Log.v("MyLog","AsosId:"+asosId);
                 intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("user", thisUser);
                 intent.putExtra("ip", ipadress.getText().toString());
+                intent.putExtra("asosId",asosId);
                 saveIP(ipadress.getText().toString());
                 saveLogin(loginEdt.getText().toString());
                 startActivity(intent);
@@ -244,9 +264,7 @@ public class LoginActivity extends AppCompatActivity {
                     message.setVisibility(View.VISIBLE);
                 }
             }
-            if(progressDialog.isShowing()){
-                progressDialog.dismiss();
-            }
+
 
         }
 

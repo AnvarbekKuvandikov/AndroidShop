@@ -38,14 +38,14 @@ public class MainActivity extends AppCompatActivity {
     private EditText price_product_count;
     private EditText price_inproduct_count;
     private Product selectProduct;
-    private Product selectedItem;
-    private static Integer selectItemSum=0;
+    private static Integer selectProductSum=0;
+    private static Integer selectedProduct=0;
     private static Integer sum=0;
+    private static Integer asosId;
 
     private static User thisuUser;
 
     private ProgressDialog progressDialog;
-    private static String urlProducts="http://192.168.43.52:8080/application/json/products";
     private static String ip="192.168.43.57";
     private static String urlAsos="http://192.168.43.52:8080/application/json/asos";
 
@@ -69,10 +69,13 @@ public class MainActivity extends AppCompatActivity {
 
         list = new ArrayList<>();
         list2 = new ArrayList<>();
+        Log.v(TAG,"Ha ina hohiray");
         intent=getIntent();
         thisuUser=(User)intent.getSerializableExtra("user");
         ip=intent.getStringExtra("ip");
-
+        Log.v(TAG,ip+"");
+        asosId=(Integer) intent.getIntExtra("asosId",0);
+        Log.v(TAG,asosId+"");
         Log.v(TAG,thisuUser.getId().toString());
         Log.v(TAG,intent.getStringExtra("ip"));
         new GetProducts().execute();
@@ -106,8 +109,16 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Product product=(Product)view.getTag();
+                        Log.v(TAG,product.getName()+" "+product.getId());
+                        Log.v(TAG,product.getName()+" "+product.getPutId());
+                        Log.v(TAG,product.getName()+" "+product.getCount());
+                        Log.v(TAG,product.getName()+" "+product.getIncount());
+                        Log.v(TAG,product.getName()+" "+product.getInprice());
+                        Log.v(TAG,product.getName()+" "+product.getPrice());
+
+//                        Log.v(TAG,product.getName()+" "+selectProduct.getName());
+                        selectedProduct=1;
                         setProduct(product);
-                        Log.v(TAG,product.getName()+" "+selectProduct.getName());
                     }
                 }
         );
@@ -115,63 +126,25 @@ public class MainActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        if(selectProduct!=null){
-                                            selectedItem=new Product();
-
+                                        if(selectedProduct!=0){
 
                                             int price_product_count_int=tryParse(price_product_count.getText().toString());
                                             int price_inproduct_count_int=tryParse(price_inproduct_count.getText().toString());
 
                                             Log.v(TAG,price_inproduct_count_int+" "+price_product_count_int);
 
-                                            if(price_product_count_int>0 && price_inproduct_count_int>0) {
-                                                Log.v(TAG,"in 1:"+selectProduct.getName());
-                                                selectedItem.setId(selectProduct.getId());
-                                                selectedItem.setName(selectProduct.getName());
-                                                selectedItem.setPrice(selectProduct.getPrice());
-                                                selectedItem.setInprice(selectProduct.getInprice());
+                                            if(price_product_count_int>0 || price_inproduct_count_int>0) {
+                                                Log.v(TAG, "in 1:" + selectProduct.getName());
+                                                selectProduct.setCount(price_product_count_int);
+                                                selectProduct.setCount(price_inproduct_count_int);
 
-                                                selectedItem.setCount(price_product_count_int);
-                                                selectedItem.setIncount(price_inproduct_count_int);
-
-                                                selectItemSum=(selectProduct.getPrice()*selectedItem.getCount()+selectProduct.getInprice()*selectedItem.getIncount());
-                                                sum+=selectItemSum;
-                                                list2.add(selectedItem);
-                                                setProduct(null);
-                                                Log.v(TAG,"list2.size:"+list2.size());
-
-                                            }
-                                            else if (price_product_count_int>0) {
-                                                selectedItem.setId(selectProduct.getId());
-                                                selectedItem.setName(selectProduct.getName());
-                                                selectedItem.setPrice(selectProduct.getPrice());
-                                                selectedItem.setInprice(selectProduct.getInprice());
-
-                                                selectedItem.setCount(price_product_count_int);
-                                                selectedItem.setIncount(0);
-
-                                                selectItemSum=selectProduct.getPrice()*selectedItem.getCount();
-                                                sum+=selectItemSum;
-
-                                                list2.add(selectedItem);
-
-                                                setProduct(null);
-                                                Log.v(TAG,"list2.size:"+list2.size());
-
-                                            }
-                                            else if(price_inproduct_count_int>0) {
-                                                selectedItem.setId(selectProduct.getId());
-                                                selectedItem.setName(selectProduct.getName());
-                                                selectedItem.setPrice(selectProduct.getPrice());
-                                                selectedItem.setInprice(selectProduct.getInprice());
-
-                                                selectedItem.setIncount(price_inproduct_count_int);
-                                                selectedItem.setCount(0);
-                                                selectItemSum=selectProduct.getInprice()*selectedItem.getIncount();
-                                                sum+=selectItemSum;
-                                                list2.add(selectedItem);
-                                                setProduct(null);
-                                                Log.v(TAG,"list2.size:"+list2.size());
+                                                selectProductSum = (selectProduct.getPrice() * selectProduct.getCount() + selectProduct.getInprice() * selectProduct.getIncount());
+                                                sum += selectProductSum;
+                                                list2.add(selectProduct);
+                                                new AddProduct().execute();
+                                                selectedProduct=0;
+                                                setProduct(selectProduct);
+                                                Log.v(TAG, "list2.size:" + list2.size());
                                             }
                                             else{
                                                 Toast.makeText(MainActivity.this,"Сонини киритинг !!!",Toast.LENGTH_LONG).show();
@@ -193,7 +166,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                setProduct(null);
+                                selectedProduct=0;
+                                setProduct(selectProduct);
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
                                 break;
@@ -213,14 +187,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setProduct(Product product) {
-        if(product!=null){
+
+        if(selectedProduct!=0){
             ((TextView)findViewById(R.id.select_product)).setText(product.getName());
             selectProduct=product;
         }
         else{
             ((TextView)findViewById(R.id.select_product)).setText(R.string.product);
             selectProduct=product;
-            selectedItem=null;
         }
         price_product_count.getText().clear();
         price_inproduct_count.getText().clear();
@@ -237,10 +211,46 @@ public class MainActivity extends AppCompatActivity {
         return retVal;
     }
 
+    private class AddProduct extends AsyncTask<Void,Void,Void>{
+        String urlRequest="http://"+ip+":8080/application/json/asosslave/asosid="+asosId+"/userid="+thisuUser.getId();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog=new ProgressDialog(MainActivity.this);
+            progressDialog.setMessage("Малумот сақланяпти");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+           HttpHandler httpHandler=new HttpHandler();
+           Log.v(TAG,"Ishla ahi");
+            Log.v(TAG,"selectProduct Id:"+selectProduct.getId());
+            Log.v(TAG,"selectProduct PutId:"+selectProduct.getPutId());
+            Log.v(TAG,"selectProduct Count:"+selectProduct.getCount());
+            Log.v(TAG,"selectProduct InCount:"+selectProduct.getIncount());
+            Log.v(TAG,"selectProduct InPrice:"+selectProduct.getInprice());
+            Log.v(TAG,"selectProduct Price:"+selectProduct.getPrice());
+           httpHandler.makeServiceAddProduct(urlRequest,selectProduct);
+           Log.v(TAG,"Ishlivar barakat tap");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(progressDialog.isShowing()){
+                progressDialog.dismiss();
+            }
+        }
+
+    }
+
 
     private class GetProducts extends AsyncTask<Void, Void, Void> {
-
-
+        private String urlProducts="http://"+ip+":8080/application/json/products";
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
