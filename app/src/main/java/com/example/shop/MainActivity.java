@@ -6,8 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -38,10 +43,11 @@ public class MainActivity extends AppCompatActivity {
     private EditText price_product_count;
     private EditText price_inproduct_count;
     private Product selectProduct;
-    private static Integer selectProductSum=0;
+    private static Double selectProductSum=0.0;
     private static Integer selectedProduct=0;
-    private static Integer sum=0;
+    private static Double sum=0.0;
     private static Integer asosId;
+    private Integer type;
 
     private static User thisuUser;
 
@@ -50,11 +56,25 @@ public class MainActivity extends AppCompatActivity {
     private static String urlAsos="http://192.168.43.52:8080/application/json/asos";
 
     private Intent intent;
+    private Intent typeIntent;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
         save=(ImageView)findViewById(R.id.save);
         calsel=(ImageView)findViewById(R.id.calsel);
@@ -73,12 +93,13 @@ public class MainActivity extends AppCompatActivity {
         intent=getIntent();
         thisuUser=(User)intent.getSerializableExtra("user");
         ip=intent.getStringExtra("ip");
+        type=intent.getIntExtra("type",1);
         Log.v(TAG,ip+"");
         asosId=(Integer) intent.getIntExtra("asosId",0);
-        Log.v(TAG,asosId+"");
         Log.v(TAG,thisuUser.getId().toString());
         Log.v(TAG,intent.getStringExtra("ip"));
         new GetProducts().execute();
+        Log.v(TAG,asosId+"");
 
         adapter2 = new ItemAdapter(this, R.layout.list_item,list2);
         listView2.setAdapter(adapter2);
@@ -141,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
                                                 selectProductSum = (selectProduct.getPrice() * selectProduct.getCount() + selectProduct.getInprice() * selectProduct.getIncount());
                                                 sum += selectProductSum;
                                                 list2.add(selectProduct);
+                                                adapter2.notifyDataSetChanged();
                                                 new AddProduct().execute();
                                                 selectedProduct=0;
                                                 setProduct(selectProduct);
@@ -186,6 +208,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.item1) {
+           downActivity();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void setProduct(Product product) {
 
         if(selectedProduct!=0){
@@ -210,6 +249,18 @@ public class MainActivity extends AppCompatActivity {
         }
         return retVal;
     }
+    private void downActivity(){
+        typeIntent = new Intent(MainActivity.this, TypeChangeActivity.class);
+        typeIntent.putExtra("user",intent.getSerializableExtra("user"));
+        typeIntent.putExtra("ip",intent.getStringExtra("ip"));
+        typeIntent.putExtra("asosId",intent.getIntExtra("asosId",0));
+        typeIntent.putExtra("type",intent.getIntExtra("type",0));
+        startActivity(typeIntent);
+        finish();
+    }
+
+
+
 
     private class AddProduct extends AsyncTask<Void,Void,Void>{
         String urlRequest="http://"+ip+":8080/application/json/asosslave/asosid="+asosId+"/userid="+thisuUser.getId();
@@ -250,7 +301,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private class GetProducts extends AsyncTask<Void, Void, Void> {
-        private String urlProducts="http://"+ip+":8080/application/json/products";
+//        http://localhost:8080/application/json/clientid=4/4/products
+        private String urlProducts="http://"+ip+":8080/application/json/clientid="+thisuUser.getClientId()+"/"+ type +"/products";
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -286,8 +338,10 @@ public class MainActivity extends AppCompatActivity {
                         product.setName(object.getString("name"));
                         product.setCount(object.getInt("count"));
                         product.setIncount(object.getInt("incount"));
-                        product.setPrice(object.getInt("price"));
-                        product.setInprice(object.getInt("inprice"));
+                        product.setPrice(object.getDouble("price"));
+                        product.setInprice(object.getDouble("inprice"));
+                        Log.v(TAG,"selectProduct Id:"+product.toString());
+
                         list.add(product);
 
                     }

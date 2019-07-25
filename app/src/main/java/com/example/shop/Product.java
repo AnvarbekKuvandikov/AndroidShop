@@ -4,15 +4,15 @@ public class Product {
     private Integer putId;
     private Integer id;
     private String name;
-    private Integer price;
-    private  Integer inprice;
+    private Double price;
+    private Double inprice;
     private Integer count;
     private Integer incount;
 
     public Product() {
     }
 
-    public Product(Integer putId, Integer id, String name, Integer price, Integer inprice, Integer count, Integer incount) {
+    public Product(Integer putId, Integer id, String name, Double price, Double inprice, Integer count, Integer incount) {
         this.putId = putId;
         this.id = id;
         this.name = name;
@@ -26,7 +26,7 @@ public class Product {
         this.name = name;
     }
 
-    public Product(Integer id, String name, Integer price, Integer inprice) {
+    public Product(Integer id, String name, Double price, Double inprice) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -34,7 +34,7 @@ public class Product {
     }
 
 
-    public Product(String name, Integer price, Integer inprice) {
+    public Product(String name, Double price, Double inprice) {
         this.name = name;
         this.price = price;
         this.inprice = inprice;
@@ -80,19 +80,20 @@ public class Product {
         this.name = name;
     }
 
-    public Integer getPrice() {
+
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public Integer getInprice() {
+    public Double getInprice() {
         return inprice;
     }
 
-    public void setInprice(Integer inprice) {
+    public void setInprice(Double inprice) {
         this.inprice = inprice;
     }
 

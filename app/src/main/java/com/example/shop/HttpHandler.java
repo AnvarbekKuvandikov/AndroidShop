@@ -175,7 +175,7 @@ public class HttpHandler {
             conn.setRequestMethod("GET");
             InputStream in=new BufferedInputStream(conn.getInputStream());
             response=convertStreamToString(in);
-//            conn.disconnect();
+            conn.disconnect();
         } catch (ProtocolException e) {
             Log.v(TAG,"ProtocolExceptio: "+e.getMessage());
         } catch (MalformedURLException e) {
@@ -189,7 +189,7 @@ public class HttpHandler {
 
 
 
-    public String makeServiceCreateAsos(String reqUrl,User user){
+    public String makeServiceCreateAsos(String reqUrl, User user, Integer haridorId){
         String response=null;
         try{
             URL url=new URL(reqUrl);
@@ -202,13 +202,18 @@ public class HttpHandler {
                 "clientId": 4,
                 "userId": 99,
                 "xodimId": 99,
+                "haridorId":
                 "dilerId":0,
                 "turOper": 2
+
+
+
         }*/
 
             jsonParam.put("clientId", user.getClientId());
             jsonParam.put("userId", user.getId());
             jsonParam.put("xodimId", user.getId());
+            jsonParam.put("haridorId",haridorId);
             jsonParam.put("dilerId", 0);
             jsonParam.put("turOper", 2);
 

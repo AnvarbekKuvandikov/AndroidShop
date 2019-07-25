@@ -4,34 +4,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/backgroun"
     tools:context=".TypeChangeActivity">
-
+    <include
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <TextView
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="80dp"
-        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="30dp"
         android:layout_marginTop="30dp"
 
-        android:text="Савдо режими"
+        android:text="Ҳаридор номи"
         android:textAlignment="center"
         android:textColor="@color/colorAccent" />
 
     <AutoCompleteTextView
         android:id="@+id/client"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="80dp"
-        android:layout_marginRight="50dp"
-        android:background="@drawable/backgroun" />
+        android:layout_height="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/backgroun"
+        android:ems="10"
+        android:padding="10dp"
+        tools:targetApi="o"
+        android:singleLine="true" />
 
     <RadioGroup
+        android:id="@+id/choices"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:layout_marginBottom="20dp"
-        >
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="20dp">
 
         <TextView
             android:id="@+id/textView3"
@@ -39,9 +47,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="80dp"
             android:layout_marginRight="50dp"
-            android:textColor="@color/colorAccent"
+            android:text="Савдо режими"
             android:textAlignment="center"
-            android:text="Савдо режими" />
+            android:textColor="@color/colorAccent" />
 
         <RadioButton
             android:id="@+id/type1"
@@ -57,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="80dp"
             android:layout_marginRight="50dp"
-            
+
             android:text="Улгиржи 1 нақт" />
 
         <RadioButton
@@ -66,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="80dp"
             android:layout_marginRight="50dp"
-            
+
             android:text="Улгиржи 2 нақт" />
 
         <RadioButton
@@ -75,26 +83,36 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="80dp"
             android:layout_marginRight="50dp"
-            
+
             android:text="Улгиржи 1 пластик" />
 
         <RadioButton
-            android:id="@+id/radioButton2"
+            android:id="@+id/type5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="80dp"
             android:layout_marginRight="50dp"
-            
+
             android:text="Улгиржи 2 пластик" />
 
         <RadioButton
-            android:id="@+id/radioButton"
+            android:id="@+id/type6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="80dp"
             android:layout_marginRight="50dp"
             android:text="Пул ўтказиш" />
     </RadioGroup>
+
+    <Button
+        android:id="@+id/gone"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/backgroun2"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="50dp"
+        android:text="Сотув"
+        />
 
 
 </LinearLayout>
