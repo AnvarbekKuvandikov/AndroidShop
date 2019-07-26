@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private static Double sum=0.0;
     private static Integer asosId;
     private Integer type;
+    private Integer haridorId;
 
     private static User thisuUser;
 
@@ -71,8 +71,12 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if(list2.size()>0){
+                    new Finish().execute();
+                }
+                else{
+                    Toast.makeText(MainActivity.this,"Хеч қандай махсулот йўқ !!!",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -219,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.item1) {
-           downActivity();
+           new Finish().execute();
         }
 
         return super.onOptionsItemSelected(item);
@@ -250,13 +254,7 @@ public class MainActivity extends AppCompatActivity {
         return retVal;
     }
     private void downActivity(){
-        typeIntent = new Intent(MainActivity.this, TypeChangeActivity.class);
-        typeIntent.putExtra("user",intent.getSerializableExtra("user"));
-        typeIntent.putExtra("ip",intent.getStringExtra("ip"));
-        typeIntent.putExtra("asosId",intent.getIntExtra("asosId",0));
-        typeIntent.putExtra("type",intent.getIntExtra("type",0));
-        startActivity(typeIntent);
-        finish();
+
     }
 
 
@@ -381,4 +379,45 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+
+
+    private class Finish extends AsyncTask<Void,Void,Void>{
+        String urlBlockAsos = "http://" + ip + ":8080/application/json/asosblock";
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog=new ProgressDialog(MainActivity.this);
+            progressDialog.setMessage("Малумот сақланйапти");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HttpHandler httpHandler=new HttpHandler();
+            Log.v("MyLog3",""+asosId);
+            httpHandler.makeServiceBlockAsos(urlBlockAsos,asosId);
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+            typeIntent = new Intent(MainActivity.this, TypeChangeActivity.class);
+            typeIntent.putExtra("user",intent.getSerializableExtra("user"));
+            typeIntent.putExtra("ip",intent.getStringExtra("ip"));
+            typeIntent.putExtra("asosId",intent.getIntExtra("asosId",0));
+            typeIntent.putExtra("type",intent.getIntExtra("type",0));
+            startActivity(typeIntent);
+            finish();
+        }
+
+
+    }
+
+
 }

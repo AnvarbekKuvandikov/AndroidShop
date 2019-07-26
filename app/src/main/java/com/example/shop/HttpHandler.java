@@ -164,6 +164,40 @@ public class HttpHandler {
     }
 
 
+    public Void makeServiceBlockAsos(String reqUrl,Integer asosId){
+        String response=null;
+        try{
+            URL url=new URL(reqUrl);
+            HttpURLConnection conn=(HttpURLConnection)url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+            JSONObject object=new JSONObject();
+            try {
+                object.put("id",asosId);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+            writer.write(object.toString());
+            writer.flush();
+            writer.close();
+            os.close();
+            conn.connect();
+            Log.v("MyLog4",conn.getResponseMessage()+"");
+
+        } catch (ProtocolException e) {
+            Log.v(TAG,"ProtocolExceptio: "+e.getMessage());
+        } catch (MalformedURLException e) {
+            Log.v(TAG,"MalformedURLException: "+e.getMessage());
+        } catch (IOException e) {
+            Log.v(TAG+"4","IOException: "+e.getMessage());
+        }
+        return null;
+
+    }
+
+
 
 
     public  String makeServiceCall(String reqUrl){

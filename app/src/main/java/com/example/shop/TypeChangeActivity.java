@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -72,9 +74,16 @@ public class TypeChangeActivity extends AppCompatActivity {
         list =new ArrayList<>();
         new getHaridor().execute();
 
+
         client = (AutoCompleteTextView) findViewById(R.id.client);
         adapter=new ArrayAdapter<>(this,android.R.layout.simple_dropdown_item_1line, list);
         client.setAdapter(adapter);
+        client.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
+                String selection = (String)parent.getItemAtPosition(position);
+                haridorId=listId.get(list.indexOf(selection));
+            }
+        });
 
         retrieveChoices();
 
@@ -129,15 +138,6 @@ public class TypeChangeActivity extends AppCompatActivity {
     private void downActivity(){
         if (chechIsSelectItems()){
             new getAsos().execute();
-            saveRadioChoice();
-            mainIntent.putExtra("type",type);
-            Intent intent = new Intent(TypeChangeActivity.this, MainActivity.class);
-            intent.putExtra("user", mainIntent.getSerializableExtra("user"));
-            intent.putExtra("ip", mainIntent.getStringExtra("ip"));
-            intent.putExtra("asosId",mainIntent.getIntExtra("asosId",0));
-            intent.putExtra("type",mainIntent.getIntExtra("type",0));
-            startActivity(intent);
-            finish();
         }
         else{
             Toast.makeText(TypeChangeActivity.this,"Савдо турини танланг !!!",Toast.LENGTH_LONG).show();
@@ -199,11 +199,11 @@ public class TypeChangeActivity extends AppCompatActivity {
                     jsonAsos = new JSONObject(jsonAsosStr);
                     if(!jsonAsos.isNull("id")){
                         asosId=jsonAsos.getInt("id");
+                        Log.v("MyLog3","TypeChange:"+asosId);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
 
             }
 
@@ -216,6 +216,17 @@ public class TypeChangeActivity extends AppCompatActivity {
             if(progressDialog.isShowing()){
                 progressDialog.dismiss();
             }
+            saveRadioChoice();
+            mainIntent.putExtra("type",type);
+            mainIntent.putExtra("asosId",asosId);
+            Log.v("MyLog3","mainIntent"+(Integer)mainIntent.getIntExtra("asosId",0));
+            Intent intent = new Intent(TypeChangeActivity.this, MainActivity.class);
+            intent.putExtra("user", mainIntent.getSerializableExtra("user"));
+            intent.putExtra("ip", mainIntent.getStringExtra("ip"));
+            intent.putExtra("asosId",mainIntent.getIntExtra("asosId",0));
+            intent.putExtra("type",mainIntent.getIntExtra("type",0));
+            startActivity(intent);
+            finish();
         }
     }
     private class getHaridor extends AsyncTask<Void,Void,Void>{
