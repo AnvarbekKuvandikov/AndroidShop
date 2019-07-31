@@ -8,6 +8,7 @@ public class Product {
     private Double inprice;
     private Integer count;
     private Integer incount;
+    private  String shtrix;
 
     public Product() {
     }
@@ -38,6 +39,14 @@ public class Product {
         this.name = name;
         this.price = price;
         this.inprice = inprice;
+    }
+
+    public String getShtrix() {
+        return shtrix;
+    }
+
+    public void setShtrix(String shtrix) {
+        this.shtrix = shtrix;
     }
 
     public Integer getPutId() {
@@ -107,6 +116,7 @@ public class Product {
                 ", inprice=" + inprice +
                 ", count=" + count +
                 ", incount=" + incount +
+                ", shtrix='" + shtrix + '\'' +
                 '}';
     }
 }

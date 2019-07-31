@@ -57,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Intent intent;
     private Intent typeIntent;
-
-
+    private ImageView barcodeImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +65,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        barcodeImageView=findViewById(R.id.action_image_barcode);
+        barcodeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent("com.google.zxing.client.android.SCAN");
+                intent.setPackage("com.google.zxing.client.android");
+                intent.putExtra("SCAN_FORMATS", "CODE_39,CODE_93,CODE_128,DATA_MATRIX,ITF,CODABAR,EAN_13,EAN_8,UPC_A,QR_CODE");
+                startActivityForResult(intent, 0);
+            }
+        });
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
 
         save=(ImageView)findViewById(R.id.save);
         calsel=(ImageView)findViewById(R.id.calsel);
@@ -153,15 +164,15 @@ public class MainActivity extends AppCompatActivity {
                                     public void onClick(View v) {
                                         if(selectedProduct!=0){
 
-                                            int price_product_count_int=tryParse(price_product_count.getText().toString());
-                                            int price_inproduct_count_int=tryParse(price_inproduct_count.getText().toString());
+                                            Integer price_product_count_int=tryParse(price_product_count.getText().toString());
+                                            Integer price_inproduct_count_int=tryParse(price_inproduct_count.getText().toString());
 
                                             Log.v(TAG,price_inproduct_count_int+" "+price_product_count_int);
 
                                             if(price_product_count_int>0 || price_inproduct_count_int>0) {
-                                                Log.v(TAG, "in 1:" + selectProduct.getName());
+                                                Log.v(TAG+"in 1:",   selectProduct.getName()+price_product_count_int+" "+price_inproduct_count_int);
                                                 selectProduct.setCount(price_product_count_int);
-                                                selectProduct.setCount(price_inproduct_count_int);
+                                                selectProduct.setIncount(price_inproduct_count_int);
 
                                                 selectProductSum = (selectProduct.getPrice() * selectProduct.getCount() + selectProduct.getInprice() * selectProduct.getIncount());
                                                 sum += selectProductSum;
@@ -213,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main,menu);
@@ -227,6 +239,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                String contents = intent.getStringExtra("SCAN_RESULT");
+                searchView.setQuery(contents,false);
+                Log.v(TAG+"b",contents);
+            } else if (resultCode == RESULT_CANCELED) {
+                // Handle cancel
+
+            }
+        }
     }
 
     private void setProduct(Product product) {
@@ -338,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
                         product.setIncount(object.getInt("incount"));
                         product.setPrice(object.getDouble("price"));
                         product.setInprice(object.getDouble("inprice"));
+                        product.setShtrix(object.getString("shtrix"));
                         Log.v(TAG,"selectProduct Id:"+product.toString());
 
                         list.add(product);

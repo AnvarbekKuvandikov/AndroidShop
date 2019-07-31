@@ -44,10 +44,12 @@ public class CustomFilter extends Filter {
                     }
                 }
             }
-
             else {
                 for (int i = 0; i < filterList.size(); i++) {
                     if (filterList.get(i).getName().toUpperCase().contains(charSequence)) {
+                        filteredMovies.add(filterList.get(i));
+                    }
+                    if(filterList.get(i).getShtrix().equals(charSequence)){
                         filteredMovies.add(filterList.get(i));
                     }
                 }
