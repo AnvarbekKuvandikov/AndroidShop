@@ -46,6 +46,7 @@ public class TypeChangeActivity extends AppCompatActivity {
     private RadioButton type4;
     private RadioButton type5;
     private RadioButton type6;
+    private Integer selectionIndex=-1;
 
 
 
@@ -81,12 +82,13 @@ public class TypeChangeActivity extends AppCompatActivity {
         client.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
                 String selection = (String)parent.getItemAtPosition(position);
-                haridorId=listId.get(list.indexOf(selection));
+                selectionIndex=list.indexOf(selection);
+                haridorId=listId.get(selectionIndex);
             }
         });
 
-        retrieveChoices();
-
+       retrieveChoices();
+//       retrieveAutoCompleteTextView();
         gone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,6 +118,23 @@ public class TypeChangeActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+   /* private void saveAutoCompleteTextView(){
+        android.content.SharedPreferences sPref = getPreferences(MODE_PRIVATE);
+        android.content.SharedPreferences.Editor ed = sPref.edit();
+        ed.putInt(SharedPreferences.AUTOCOMPLETETEXTVIEW_SHARED_PREF, selectionIndex);
+        ed.apply();
+    }
+
+    private void retrieveAutoCompleteTextView(){
+        android.content.SharedPreferences sPref = getPreferences(MODE_PRIVATE);
+        int i=sPref.getInt(SharedPreferences.AUTOCOMPLETETEXTVIEW_SHARED_PREF, -1);
+        if( i >= 0){
+            client.setThreshold(0);
+            client.setText(list.get(i));
+            haridorId=listId.get(i);
+        }
+    }*/
 
     private void saveRadioChoice(){
         android.content.SharedPreferences sPref = getPreferences(MODE_PRIVATE);
@@ -199,6 +218,7 @@ public class TypeChangeActivity extends AppCompatActivity {
                     jsonAsos = new JSONObject(jsonAsosStr);
                     if(!jsonAsos.isNull("id")){
                         asosId=jsonAsos.getInt("id");
+//                        haridorId=jsonAsos.getInt("haridorId");
                         Log.v("MyLog3","TypeChange:"+asosId);
                     }
                 } catch (JSONException e) {
@@ -217,6 +237,7 @@ public class TypeChangeActivity extends AppCompatActivity {
                 progressDialog.dismiss();
             }
             saveRadioChoice();
+//            saveAutoCompleteTextView();
             mainIntent.putExtra("type",type);
             mainIntent.putExtra("asosId",asosId);
             Log.v("MyLog3","mainIntent"+(Integer)mainIntent.getIntExtra("asosId",0));
@@ -225,6 +246,8 @@ public class TypeChangeActivity extends AppCompatActivity {
             intent.putExtra("ip", mainIntent.getStringExtra("ip"));
             intent.putExtra("asosId",mainIntent.getIntExtra("asosId",0));
             intent.putExtra("type",mainIntent.getIntExtra("type",0));
+            intent.putExtra("sumprice",mainIntent.getStringExtra("sumprice"));
+
             startActivity(intent);
             finish();
         }

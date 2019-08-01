@@ -27,6 +27,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import me.sudar.zxingorient.ZxingOrient;
+import me.sudar.zxingorient.ZxingOrientResult;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MyLog";
@@ -48,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private static Integer asosId;
     private Integer type;
     private Integer haridorId;
+    private TextView sumPrice;
 
     private static User thisuUser;
 
@@ -66,13 +70,16 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         barcodeImageView=findViewById(R.id.action_image_barcode);
+        sumPrice=(TextView)findViewById(R.id.sum_price);
         barcodeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent("com.google.zxing.client.android.SCAN");
+                /*Intent intent=new Intent("com.google.zxing.client.android.SCAN");
                 intent.setPackage("com.google.zxing.client.android");
                 intent.putExtra("SCAN_FORMATS", "CODE_39,CODE_93,CODE_128,DATA_MATRIX,ITF,CODABAR,EAN_13,EAN_8,UPC_A,QR_CODE");
-                startActivityForResult(intent, 0);
+                startActivityForResult(intent, 0);*/
+                new ZxingOrient(MainActivity.this).setIcon(R.mipmap.ic_launcher).initiateScan();
+
             }
         });
 
@@ -81,7 +88,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(list2.size()>0){
-                    new Finish().execute();
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    new Finish().execute();
+                                    break;
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    break;
+                            }
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setMessage("Ҳаридни якунлашни истайсизми?").setPositiveButton("Ха", dialogClickListener)
+                            .setNegativeButton("Йўқ", dialogClickListener).show();
                 }
                 else{
                     Toast.makeText(MainActivity.this,"Хеч қандай махсулот йўқ !!!",Toast.LENGTH_LONG).show();
@@ -109,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         thisuUser=(User)intent.getSerializableExtra("user");
         ip=intent.getStringExtra("ip");
         type=intent.getIntExtra("type",1);
+        sumPrice.setText(intent.getStringExtra("sumprice"));
         Log.v(TAG,ip+"");
         asosId=(Integer) intent.getIntExtra("asosId",0);
         Log.v(TAG,thisuUser.getId().toString());
@@ -175,11 +198,13 @@ public class MainActivity extends AppCompatActivity {
                                                 selectProduct.setIncount(price_inproduct_count_int);
 
                                                 selectProductSum = (selectProduct.getPrice() * selectProduct.getCount() + selectProduct.getInprice() * selectProduct.getIncount());
+                                                new AddProduct().execute();
                                                 sum += selectProductSum;
                                                 list2.add(selectProduct);
                                                 adapter2.notifyDataSetChanged();
-                                                new AddProduct().execute();
                                                 selectedProduct=0;
+                                                sumPrice.setText("Умуммий сумма: " +sum+" Сўм");
+                                                intent.putExtra("sumprice",sumPrice.getText().toString());
                                                 setProduct(selectProduct);
                                                 Log.v(TAG, "list2.size:" + list2.size());
                                             }
@@ -235,23 +260,26 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.item1) {
-           new Finish().execute();
+//           new Finish().execute();
+            downActivity();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) {
-                String contents = intent.getStringExtra("SCAN_RESULT");
-                searchView.setQuery(contents,false);
-                Log.v(TAG+"b",contents);
-            } else if (resultCode == RESULT_CANCELED) {
-                // Handle cancel
 
-            }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent){
+
+        ZxingOrientResult scanResult =
+                ZxingOrient.parseActivityResult(requestCode, resultCode, intent);
+
+        if (scanResult != null) {
+            // handle the result
+            searchView.setQuery(scanResult.getContents(),false);
         }
+
     }
 
     private void setProduct(Product product) {
@@ -279,7 +307,14 @@ public class MainActivity extends AppCompatActivity {
         return retVal;
     }
     private void downActivity(){
-
+        typeIntent = new Intent(MainActivity.this, TypeChangeActivity.class);
+        typeIntent.putExtra("user",intent.getSerializableExtra("user"));
+        typeIntent.putExtra("ip",intent.getStringExtra("ip"));
+        typeIntent.putExtra("asosId",intent.getIntExtra("asosId",0));
+        typeIntent.putExtra("type",intent.getIntExtra("type",0));
+        typeIntent.putExtra("sumprice",intent.getStringExtra("sumprice"));
+        startActivity(typeIntent);
+        finish();
     }
 
 
@@ -326,6 +361,8 @@ public class MainActivity extends AppCompatActivity {
     private class GetProducts extends AsyncTask<Void, Void, Void> {
 //        http://localhost:8080/application/json/clientid=4/4/products
         private String urlProducts="http://"+ip+":8080/application/json/clientid="+thisuUser.getClientId()+"/"+ type +"/products";
+        private String urlAddProducts="http://"+ip+":8080/application/json/asosid="+ asosId +"/products";
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -339,7 +376,40 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             HttpHandler httpHandler=new HttpHandler();
             String jsonStr=httpHandler.makeServiceCall(urlProducts);
+            String jsonStr2=httpHandler.makeServiceCall(urlAddProducts);
             Log.v(TAG,"URL:"+urlProducts);
+            Log.v(TAG,"URL:"+urlAddProducts);
+            if(jsonStr2!=null){
+                try {
+                    JSONArray jsonArray2=new JSONArray(jsonStr2);
+                    for (int i=0;i<jsonArray2.length();i++){
+                        Product item = new Product();
+                        JSONObject object2 = jsonArray2.getJSONObject(i);
+
+                                /*
+                                "id": 1,
+                                "productId": 2,
+                                "nameShort": "anvar",
+                                "count": 4,
+                                "incount": 5,
+                                "price": 6,
+                                "inprice": 7
+                                */
+                        item.setPutId(object2.getInt("id"));
+                        item.setId(object2.getInt("productId"));
+                        item.setName(object2.getString("name"));
+                        item.setCount(object2.getInt("count"));
+                        item.setIncount(object2.getInt("incount"));
+                        item.setPrice(object2.getDouble("price"));
+                        item.setInprice(object2.getDouble("inprice"));
+                        list2.add(item);
+                        Log.v(TAG,"item:"+item.toString());
+                    }
+                } catch (JSONException e) {
+                   Log.v(TAG,e.getMessage());
+                }
+
+            }
             if(jsonStr != null) {
                 try {
                     JSONArray jsonArray = new JSONArray(jsonStr);
@@ -364,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
                         product.setPrice(object.getDouble("price"));
                         product.setInprice(object.getDouble("inprice"));
                         product.setShtrix(object.getString("shtrix"));
-                        Log.v(TAG,"selectProduct Id:"+product.toString());
+//                        Log.v(TAG,"selectProduct Id:"+product.toString());
 
                         list.add(product);
 

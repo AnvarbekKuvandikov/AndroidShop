@@ -73,6 +73,7 @@
         android:layout_marginRight="50dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/backgroun2"
+        android:textColor="@color/white"
         android:text="@string/action_sign_in" />
 
     <TextView
