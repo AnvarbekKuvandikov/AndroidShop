@@ -64,7 +64,7 @@ public class HttpHandler {
 
     }
 
-    public String makeServiceAddProduct(String reqUrl, Product selectedItem){
+    public Integer makeServiceAddProduct(String reqUrl, Product selectedItem){
         HttpURLConnection conn= null;
         try {
         URL url=new URL(reqUrl);
@@ -96,26 +96,24 @@ public class HttpHandler {
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
-            return response.toString();
+            return Integer.parseInt(response.toString());
 
 
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return 0;
     }
+    public void putProduct(String reqUrl, Product selectedItem) {
 
-
-
-
-    public Void makeServicePostProduct(String reqUrl,Product selectedItem){
-        String response=null;
-        try{
+        HttpURLConnection conn= null;
+        try {
             URL url=new URL(reqUrl);
-            HttpURLConnection conn=(HttpURLConnection)url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+            conn = (HttpURLConnection)url.openConnection();
+            conn.setRequestMethod("PUT");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setRequestProperty("Accept", "application/json");
             conn.setDoOutput(true);
             JSONObject object=new JSONObject();
             try {
@@ -130,39 +128,45 @@ public class HttpHandler {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-//            selectProduct.
-          /*  {
-                "id": 4053,
-                    "productId": 1,
-
-                    "name": "0001. Дафтар 12  варок ОК =",
-                    "count": 432,
-                    "incount": 0,
-                    "price": 4500,
-                    "inprice": 800
+            String jsonInputString=object.toString();
+            OutputStream os=conn.getOutputStream();
+            byte[] input = jsonInputString.getBytes("utf-8");
+            os.write(input, 0, input.length);
+            BufferedReader br = new BufferedReader( new InputStreamReader(conn.getInputStream(), "utf-8"));
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
             }
-*/
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-            writer.write(object.toString());
-            Log.i(MainActivity.class.toString(), object.toString());
-            writer.flush();
-            writer.close();
-            os.close();
-            conn.disconnect();
 
-        } catch (ProtocolException e) {
-            Log.v(TAG,"ProtocolExceptio: "+e.getMessage());
-        } catch (MalformedURLException e) {
-            Log.v(TAG,"MalformedURLException: "+e.getMessage());
+
         } catch (IOException e) {
-            Log.v(TAG,"IOException: "+e.getMessage());
+            e.printStackTrace();
         }
-        return null;
-
     }
 
+
+
+    public void makeServiceDelItem(String reqUrl){
+        String response="0";
+        HttpURLConnection conn= null;
+        URL url= null;
+
+        try {
+            url = new URL(reqUrl);
+            conn = (HttpURLConnection)url.openConnection();
+            conn.setRequestMethod("DELETE");
+            conn.setRequestProperty("charset", "utf-8");
+            conn.setUseCaches(false);
+
+            if(conn.getResponseCode() == 204){
+                Log.d(TAG,"Deleted");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public Void makeServiceBlockAsos(String reqUrl,Integer asosId){
         String response=null;
@@ -276,6 +280,7 @@ public class HttpHandler {
     }
 
 
+
     private String convertStreamToString(InputStream in) {
         BufferedReader reader=new BufferedReader(new InputStreamReader(in));
         StringBuilder stringBuilder=new StringBuilder();
@@ -294,6 +299,7 @@ public class HttpHandler {
         }
         return stringBuilder.toString();
     }
+
 
 
 }

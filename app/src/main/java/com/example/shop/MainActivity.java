@@ -51,7 +51,9 @@ public class MainActivity extends AppCompatActivity {
     private static Integer asosId;
     private Integer type;
     private Integer haridorId;
+    private Integer indexList2Item;
     private TextView sumPrice;
+    private TextView selectProductView;
 
     private static User thisuUser;
 
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         barcodeImageView=findViewById(R.id.action_image_barcode);
         sumPrice=(TextView)findViewById(R.id.sum_price);
+        selectProductView=(TextView)findViewById(R.id.select_product);
         barcodeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         new GetProducts().execute();
         Log.v(TAG,asosId+"");
 
-        adapter2 = new ItemAdapter(this, R.layout.list_item,list2);
+        adapter2 = new ItemAdapter(this, R.layout.list_item,list2,ip);
         listView2.setAdapter(adapter2);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -181,6 +184,21 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+        listView2.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Product item=(Product)view.getTag();
+              if(item==null){
+                Log.v(TAG,"Ah sani anangi");
+              }
+                selectedProduct=2;
+                indexList2Item=i;
+                Log.v(TAG,item.toString());
+
+                setProduct(item);
+            }
+        });
 
         save.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -196,17 +214,14 @@ public class MainActivity extends AppCompatActivity {
                                                 Log.v(TAG+"in 1:",   selectProduct.getName()+price_product_count_int+" "+price_inproduct_count_int);
                                                 selectProduct.setCount(price_product_count_int);
                                                 selectProduct.setIncount(price_inproduct_count_int);
-
-                                                selectProductSum = (selectProduct.getPrice() * selectProduct.getCount() + selectProduct.getInprice() * selectProduct.getIncount());
-                                                new AddProduct().execute();
-                                                sum += selectProductSum;
-                                                list2.add(selectProduct);
-                                                adapter2.notifyDataSetChanged();
-                                                selectedProduct=0;
-                                                sumPrice.setText("Умуммий сумма: " +sum+" Сўм");
-                                                intent.putExtra("sumprice",sumPrice.getText().toString());
-                                                setProduct(selectProduct);
-                                                Log.v(TAG, "list2.size:" + list2.size());
+                                                if(selectedProduct==1){
+                                                    Log.v(TAG,"begin AddProduct().execute()");
+                                                    new AddProduct().execute();
+                                                    Log.v(TAG,"end AddProduct().execute()");
+                                                }
+                                                else if(selectedProduct==2){
+                                                    new PutProduct().execute();
+                                                }
                                             }
                                             else{
                                                 Toast.makeText(MainActivity.this,"Сонини киритинг !!!",Toast.LENGTH_LONG).show();
@@ -285,11 +300,25 @@ public class MainActivity extends AppCompatActivity {
     private void setProduct(Product product) {
 
         if(selectedProduct!=0){
-            ((TextView)findViewById(R.id.select_product)).setText(product.getName());
+            selectProductView.setText(product.getName());
+            if (selectedProduct==2){
+                selectProductView.setTextColor(getResources().getColor(R.color.colorPrimary));
+                if(product.getCount()>0){
+                    CharSequence c=""+product.getCount();
+                    price_product_count.setText(c,TextView.BufferType.EDITABLE);
+                }
+                if(product.getIncount()>0){
+                    CharSequence c=""+product.getIncount();
+                  price_inproduct_count.setText(c,TextView.BufferType.EDITABLE);
+                }
+            }
+            else{
+                selectProductView.setTextColor(getResources().getColor(R.color.white));
+            }
             selectProduct=product;
         }
         else{
-            ((TextView)findViewById(R.id.select_product)).setText(R.string.product);
+            selectProductView.setText(R.string.product);
             selectProduct=product;
         }
         price_product_count.getText().clear();
@@ -322,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
 
     private class AddProduct extends AsyncTask<Void,Void,Void>{
         String urlRequest="http://"+ip+":8080/application/json/asosslave/asosid="+asosId+"/userid="+thisuUser.getId();
-
+        Integer i=0;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -335,15 +364,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
            HttpHandler httpHandler=new HttpHandler();
-           Log.v(TAG,"Ishla ahi");
-            Log.v(TAG,"selectProduct Id:"+selectProduct.getId());
-            Log.v(TAG,"selectProduct PutId:"+selectProduct.getPutId());
-            Log.v(TAG,"selectProduct Count:"+selectProduct.getCount());
-            Log.v(TAG,"selectProduct InCount:"+selectProduct.getIncount());
-            Log.v(TAG,"selectProduct InPrice:"+selectProduct.getInprice());
-            Log.v(TAG,"selectProduct Price:"+selectProduct.getPrice());
-           httpHandler.makeServiceAddProduct(urlRequest,selectProduct);
-           Log.v(TAG,"Ishlivar barakat tap");
+           i=httpHandler.makeServiceAddProduct(urlRequest,selectProduct);
+           Log.v(TAG,"makeServiceAddProduct: "+i);
             return null;
         }
 
@@ -353,6 +375,19 @@ public class MainActivity extends AppCompatActivity {
             if(progressDialog.isShowing()){
                 progressDialog.dismiss();
             }
+            if(i!=0)
+                selectProduct.setPutId(i);
+            Log.v(TAG, "selectProduct.setPutId: " + i);
+
+            selectProductSum = (selectProduct.getPrice() * selectProduct.getCount() + selectProduct.getInprice() * selectProduct.getIncount());
+            sum += selectProductSum;
+            Log.v(TAG, "list added product:" + selectProduct.toString());
+            list2.add(selectProduct);
+            adapter2.notifyDataSetChanged();
+            selectedProduct=0;
+            sumPrice.setText("Умуммий сумма: " +sum+" Сўм");
+            intent.putExtra("sumprice",sumPrice.getText().toString());
+            setProduct(selectProduct);
         }
 
     }
@@ -474,6 +509,46 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    private class PutProduct extends AsyncTask<Void,Void,Void>{
+        private String urlPutProducts="http://"+ip+":8080/application/json/putasosslave";
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog=new ProgressDialog(MainActivity.this);
+            progressDialog.setMessage("Малумот сақланйапти");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HttpHandler httpHandler=new HttpHandler();
+            httpHandler.putProduct(urlPutProducts, selectProduct);
+            return null;
+        }
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+            sum -= selectProductSum;
+            selectProductSum = (selectProduct.getPrice() * selectProduct.getCount() + selectProduct.getInprice() * selectProduct.getIncount());
+            sum += selectProductSum;
+            Log.v(TAG, "list added product:" + selectProduct.toString());
+
+            list2.set(indexList2Item,selectProduct);
+            adapter2.notifyDataSetChanged();
+            selectedProduct=0;
+
+            sumPrice.setText("Умуммий сумма: " +sum+" Сўм");
+            intent.putExtra("sumprice",sumPrice.getText().toString());
+            setProduct(selectProduct);
+
+        }
+
     }
 
 

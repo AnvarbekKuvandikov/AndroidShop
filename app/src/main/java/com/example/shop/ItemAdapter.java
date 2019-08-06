@@ -1,8 +1,11 @@
 package com.example.shop;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +16,20 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class ItemAdapter extends ArrayAdapter<Product> {
-
+    private  Product item;
     private  ItemAdapter adapter;
-    public ItemAdapter(Context context, int resource, ArrayList<Product> items) {
+    private String reqUrl="";
+    public ItemAdapter(Context context, int resource, ArrayList<Product> items,String ip) {
         super(context,resource, items);
         this.adapter=this;
+        this.reqUrl="http://"+ip+":8080/application/json/delasosslave/id=";
     }
 
     @Override
     public View getView(int position, View convertView,  ViewGroup parent) {
 
-        final Product item=getItem(position);
+        item=getItem(position);
+        Integer putId=item.getPutId();
         if (convertView == null) {
             LayoutInflater inflater =LayoutInflater.from(getContext());
             convertView=inflater.inflate(R.layout.list_item, parent, false);
@@ -41,7 +47,7 @@ public class ItemAdapter extends ArrayAdapter<Product> {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-                                adapter.remove(item);
+                               new DelItem().execute();
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
                                 break;
@@ -56,6 +62,38 @@ public class ItemAdapter extends ArrayAdapter<Product> {
         });
        convertView.setTag(item);
        return convertView;
+    }
+
+
+
+
+    public class DelItem extends AsyncTask<Void, Void, Void> {
+        ProgressDialog progressDialog;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog=new ProgressDialog(getContext());
+            progressDialog.setMessage("Махсулот ўчирилйарти !!!");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HttpHandler httpHandler=new HttpHandler();
+            Log.v("myTag",reqUrl);
+            httpHandler.makeServiceDelItem(reqUrl+ item.getPutId());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(progressDialog.isShowing()){
+                progressDialog.dismiss();
+            }
+            adapter.remove(item);
+        }
     }
 
 
