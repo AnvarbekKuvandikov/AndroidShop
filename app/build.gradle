@@ -34,5 +34,4 @@ dependencies {
 //    compile group: 'com.google.zxing', name: 'android-core', version: '3.3.0'
 
 
-
 }

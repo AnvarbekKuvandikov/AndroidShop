@@ -64,6 +64,53 @@ public class HttpHandler {
 
     }
 
+
+
+    public Integer makeServiceAddNewProduct(String reqUrl, Product selectedItem){
+        HttpURLConnection conn= null;
+        try {
+        URL url=new URL(reqUrl);
+            conn = (HttpURLConnection)url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setDoOutput(true);
+            JSONObject object=new JSONObject();
+            try {
+                object.put("id",selectedItem.getPutId());
+                object.put("name",selectedItem.getName());
+                object.put("count",selectedItem.getCount());
+                object.put("incount",selectedItem.getIncount());
+                object.put("price",selectedItem.getPrice());
+                object.put("inprice",selectedItem.getInprice());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String jsonInputString=object.toString();
+            OutputStream os=conn.getOutputStream();
+            byte[] input = jsonInputString.getBytes("utf-8");
+            os.write(input, 0, input.length);
+            BufferedReader br = new BufferedReader( new InputStreamReader(conn.getInputStream(), "utf-8"));
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            return Integer.parseInt(response.toString());
+
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
+
+
+
     public Integer makeServiceAddProduct(String reqUrl, Product selectedItem){
         HttpURLConnection conn= null;
         try {

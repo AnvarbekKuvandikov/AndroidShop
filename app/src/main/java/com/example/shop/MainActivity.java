@@ -305,11 +305,11 @@ public class MainActivity extends AppCompatActivity {
                 selectProductView.setTextColor(getResources().getColor(R.color.colorPrimary));
                 if(product.getCount()>0){
                     CharSequence c=""+product.getCount();
-                    price_product_count.setText(c,TextView.BufferType.EDITABLE);
+                    price_product_count.setText(c,EditText.BufferType.EDITABLE);
                 }
                 if(product.getIncount()>0){
                     CharSequence c=""+product.getIncount();
-                  price_inproduct_count.setText(c,TextView.BufferType.EDITABLE);
+                  price_inproduct_count.setText(c,EditText.BufferType.EDITABLE);
                 }
             }
             else{
