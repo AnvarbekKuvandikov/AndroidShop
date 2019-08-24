@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,6 +48,8 @@ public class ProductAdd extends AppCompatActivity {
         barcode2=findViewById(R.id.product_add_barcode2);
         barcode3=findViewById(R.id.product_add_barcode3);
 
+        barcode1.setText("12", TextView.BufferType.EDITABLE);
+
         barcodescan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,13 +72,27 @@ public class ProductAdd extends AppCompatActivity {
 
         if (scanResult != null) {
             // handle the result
-           if(tryParse(barcode1.getText().toString())<0){
                CharSequence c=scanResult.getContents();
-               barcode1.setText("ha", TextView.BufferType.EDITABLE);
-           }
-
+               Log.v("MyTag",""+c);
+              setText(c);
         }
 
+    }
+
+
+    public void setText(CharSequence sequence){
+        if(tryParse(barcode1.getText().toString())==0){
+             barcode1.setText(sequence, TextView.BufferType.EDITABLE);
+        }
+        else if(tryParse(barcode2.getText().toString())==0){
+            barcode2.setText(sequence, TextView.BufferType.EDITABLE);
+        }
+        else  if(tryParse(barcode3.getText().toString())==0){
+            barcode3.setText(sequence, TextView.BufferType.EDITABLE);
+        }
+        else {
+            Toast.makeText(this,"Барча штрих қодлар банд",Toast.LENGTH_LONG).show();
+        }
     }
 
     public Integer tryParse(Object obj) {

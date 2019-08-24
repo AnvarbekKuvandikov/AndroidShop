@@ -33,8 +33,10 @@ public class ProductsList extends AppCompatActivity {
         searchView=findViewById(R.id.searchView);
         intent=getIntent();
         stringList=new ArrayList<>();
+        barcodeList=new ArrayList<>();
         adapter=new ArrayAdapter<>(this,android.R.layout.simple_dropdown_item_1line, stringList);
         stringList.add("Дафтар");
+        barcodeList.add("4805058400484");
         stringList.add("Дафтар");
         stringList.add("Дафтар");
         stringList.add("Дафтар");
@@ -65,13 +67,31 @@ public class ProductsList extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        final ZxingOrientResult scanResult =
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        ZxingOrientResult scanResult =
                 ZxingOrient.parseActivityResult(requestCode, resultCode, intent);
 
         if (scanResult != null) {
             // handle the result
             Log.v("MyTag",scanResult.getContents());
+            String s=stringList.get(barcodeList.indexOf(scanResult.getContents()));
+            stringList.clear();
+            barcodeList.clear();
+            barcodeList.add(scanResult.getContents());
+            stringList.add(s);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    void myFilter(String search){
+
+        for (int i = 0; i <barcodeList.size() ; i++) {
+            if (barcodeList.get(i).equals(search)){
+
+            }
+            else{
+
+            }
 
         }
     }

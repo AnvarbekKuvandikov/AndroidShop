@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="30dp"
+    android:layout_height="40dp"
     android:background="@drawable/backgroun"
     android:orientation="horizontal">
 
@@ -14,9 +14,9 @@
         android:layout_marginTop="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:text="Дафтар ..."
         android:ems="8"
-        android:textSize="14sp" />
+        android:text="Дафтар ..."
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/item_count"
@@ -28,7 +28,7 @@
         android:layout_marginBottom="4dp"
         android:layout_weight="1"
         android:text="10"
-        android:textSize="14sp" />
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/item_incount"
@@ -40,7 +40,7 @@
         android:layout_marginBottom="4dp"
         android:layout_weight="1"
         android:text="4"
-        android:textSize="14sp" />
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/item_sum"
@@ -52,7 +52,7 @@
         android:layout_marginBottom="4dp"
         android:layout_weight="1"
         android:text="7000"
-        android:textSize="14sp" />
+        android:textSize="24sp" />
 
     <ImageView
         android:id="@+id/item_delete"

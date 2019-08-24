@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
         if(selectedProduct!=0){
             selectProductView.setText(product.getName());
             if (selectedProduct==2){
-                selectProductView.setTextColor(getResources().getColor(R.color.colorPrimary));
+                selectProductView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 if(product.getCount()>0){
                     CharSequence c=""+product.getCount();
                     price_product_count.setText(c,EditText.BufferType.EDITABLE);
@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             else{
-                selectProductView.setTextColor(getResources().getColor(R.color.white));
+                selectProductView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             }
             selectProduct=product;
         }
@@ -382,6 +382,7 @@ public class MainActivity extends AppCompatActivity {
             selectProductSum = (selectProduct.getPrice() * selectProduct.getCount() + selectProduct.getInprice() * selectProduct.getIncount());
             sum += selectProductSum;
             Log.v(TAG, "list added product:" + selectProduct.toString());
+
             list2.add(selectProduct);
             adapter2.notifyDataSetChanged();
             selectedProduct=0;
@@ -437,6 +438,7 @@ public class MainActivity extends AppCompatActivity {
                         item.setIncount(object2.getInt("incount"));
                         item.setPrice(object2.getDouble("price"));
                         item.setInprice(object2.getDouble("inprice"));
+                        item.setIncnt(object2.getInt("incnt"));
                         list2.add(item);
                         Log.v(TAG,"item:"+item.toString());
                     }
@@ -469,6 +471,7 @@ public class MainActivity extends AppCompatActivity {
                         product.setPrice(object.getDouble("price"));
                         product.setInprice(object.getDouble("inprice"));
                         product.setShtrix(object.getString("shtrix"));
+                        product.setIncnt(object.getInt("incnt"));
 //                        Log.v(TAG,"selectProduct Id:"+product.toString());
 
                         list.add(product);

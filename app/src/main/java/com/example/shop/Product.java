@@ -9,6 +9,7 @@ public class Product {
     private Integer count;
     private Integer incount;
     private  String shtrix;
+    private Integer incnt;
 
     public Product() {
     }
@@ -39,6 +40,14 @@ public class Product {
         this.name = name;
         this.price = price;
         this.inprice = inprice;
+    }
+
+    public Integer getIncnt() {
+        return incnt;
+    }
+
+    public void setIncnt(Integer incnt) {
+        this.incnt = incnt;
     }
 
     public String getShtrix() {

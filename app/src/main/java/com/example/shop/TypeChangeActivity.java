@@ -212,7 +212,7 @@ public class TypeChangeActivity extends AppCompatActivity {
             if (thisUser.getId()!=null) {
                 String urlPostAsos = "http://" + ip + ":8080/application/json/asos";
                 Log.v("MyLog", urlPostAsos);
-                String jsonAsosStr=httpHandler.makeServiceCreateAsos(urlPostAsos, thisUser,haridorId);
+                String jsonAsosStr=httpHandler.makeServiceCreateAsos(urlPostAsos, thisUser,haridorId,type);
                 JSONObject jsonAsos= null;
                 try {
                     jsonAsos = new JSONObject(jsonAsosStr);

@@ -129,6 +129,19 @@ public class HttpHandler {
                 object.put("incount",selectedItem.getIncount());
                 object.put("price",selectedItem.getPrice());
                 object.put("inprice",selectedItem.getInprice());
+                object.put("incnt",selectedItem.getIncnt());
+                /*{
+                    "id": 3407,
+                        "productId": 1088,
+                        "nameShort": null,
+                        "name": "1091. Фенал 1820 ",
+                        "count":  10,
+                        "incount": 9,
+                        "price": 20000,
+                        "inprice": 0,
+                        "shtrix": "8803465418203",
+                        "incnt": 12
+                }*/
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -274,7 +287,7 @@ public class HttpHandler {
 
 
 
-    public String makeServiceCreateAsos(String reqUrl, User user, Integer haridorId){
+    public String makeServiceCreateAsos(String reqUrl, User user, Integer haridorId, Integer type){
         String response=null;
         try{
             URL url=new URL(reqUrl);
@@ -301,6 +314,8 @@ public class HttpHandler {
             jsonParam.put("haridorId",haridorId);
             jsonParam.put("dilerId", 0);
             jsonParam.put("turOper", 2);
+            jsonParam.put("sotuvTuri", type);
+
 
 
             conn.setConnectTimeout(15000);
