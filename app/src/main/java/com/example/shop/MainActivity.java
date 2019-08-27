@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ import me.sudar.zxingorient.ZxingOrientResult;
 
 public class MainActivity extends AppCompatActivity {
 
+    private LinearLayout main_changed1;
+    private LinearLayout main_changed2;
     private static final String TAG = "MyLog";
     private SearchView searchView;
     private ListView listView;
@@ -39,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Product> list;
     private ArrayList<Product> list2;
     private ProductAdapter adapter;
+    private Integer adapterSelectedItem;
     private ItemAdapter adapter2;
+    private Integer adapter2SelectedItem;
     private ImageView save;
     private ImageView calsel;
     private EditText price_product_count;
@@ -85,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+        main_changed1=(LinearLayout)findViewById(R.id.linerLayout1);
+        main_changed2=(LinearLayout)findViewById(R.id.linerLayout2);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
                 new AdapterView.OnItemClickListener(){
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
                         Product product=(Product)view.getTag();
                         Log.v(TAG,product.getName()+" "+product.getId());
                         Log.v(TAG,product.getName()+" "+product.getPutId());
@@ -177,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.v(TAG,product.getName()+" "+product.getIncount());
                         Log.v(TAG,product.getName()+" "+product.getInprice());
                         Log.v(TAG,product.getName()+" "+product.getPrice());
-
+                        view.setBackgroundResource(R.drawable.backgroun4ch);
 //                        Log.v(TAG,product.getName()+" "+selectProduct.getName());
                         selectedProduct=1;
                         setProduct(product);
@@ -192,8 +199,9 @@ public class MainActivity extends AppCompatActivity {
               if(item==null){
                 Log.v(TAG,"Ah sani anangi");
               }
+             adapter2.setPosition(i);
+             adapter2.notifyDataSetChanged();
                 selectedProduct=2;
-                indexList2Item=i;
                 Log.v(TAG,item.toString());
 
                 setProduct(item);
@@ -302,7 +310,8 @@ public class MainActivity extends AppCompatActivity {
         if(selectedProduct!=0){
             selectProductView.setText(product.getName());
             if (selectedProduct==2){
-                selectProductView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+               main_changed1.setBackgroundResource(R.drawable.backgroun3ch);
+               main_changed2.setBackgroundResource(R.drawable.backgroun3ch);
                 if(product.getCount()>0){
                     CharSequence c=""+product.getCount();
                     price_product_count.setText(c,EditText.BufferType.EDITABLE);
@@ -313,7 +322,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             else{
-                selectProductView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                main_changed1.setBackgroundResource(R.drawable.backgroun4ch);
+                main_changed2.setBackgroundResource(R.drawable.backgroun4ch);
             }
             selectProduct=product;
         }
