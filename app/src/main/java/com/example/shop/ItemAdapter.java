@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ public class ItemAdapter extends ArrayAdapter<Product> {
     private  Product item;
     private  ItemAdapter adapter;
     private String reqUrl = "";
-    private Integer position = -1;
 
     public ItemAdapter(Context context, int resource, ArrayList<Product> items,String ip) {
         super(context,resource, items);
@@ -38,11 +36,11 @@ public class ItemAdapter extends ArrayAdapter<Product> {
             LayoutInflater inflater =LayoutInflater.from(getContext());
             convertView=inflater.inflate(R.layout.list_item, parent, false);
         }
-        if(this.position.equals(position) ){
-            ((LinearLayout)convertView.findViewById(R.id.list_item_id)).setBackgroundResource(R.drawable.backgroun3ch);
+        if(item.getSelected()){
+           convertView.setBackgroundResource(R.drawable.backgroun3ch);
         }
         else{
-            ((LinearLayout)convertView.findViewById(R.id.list_item_id)).setBackgroundResource(R.drawable.backgroun3);
+           convertView.setBackgroundResource(R.drawable.backgroun3);
         }
         ((TextView)convertView.findViewById(R.id.item_name)).setText(item.getName());
         ((TextView)convertView.findViewById(R.id.item_count)).setText(item.getCount().toString());
@@ -71,14 +69,6 @@ public class ItemAdapter extends ArrayAdapter<Product> {
         });
        convertView.setTag(item);
        return convertView;
-    }
-
-    public void setPosition(int posit) {
-        this.position = posit;
-    }
-
-    private int getPosition() {
-        return this.position;
     }
 
 

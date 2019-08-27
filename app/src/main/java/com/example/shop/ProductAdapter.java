@@ -1,6 +1,7 @@
 package com.example.shop;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,12 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         LayoutInflater inflater =LayoutInflater.from(getContext());
         convertView=inflater.inflate(R.layout.products_item, parent, false);
 
+        if(product.getSelected()){
+            convertView.setBackgroundColor(Color.BLUE);
+        }
+        else{
+            convertView.setBackgroundColor(Color.WHITE);
+        }
         ((TextView)convertView.findViewById(R.id.product_name)).setText(product.getName());
         ((TextView)convertView.findViewById(R.id.product_prices)).setText("Нархи: "+product.getPrice()+" Сўм");
         ((TextView)convertView.findViewById(R.id.product_inprices)).setText("Ич.нархи: "+product.getInprice()+" Сўм");

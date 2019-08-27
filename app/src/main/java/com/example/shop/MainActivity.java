@@ -184,8 +184,11 @@ public class MainActivity extends AppCompatActivity {
                         Log.v(TAG,product.getName()+" "+product.getIncount());
                         Log.v(TAG,product.getName()+" "+product.getInprice());
                         Log.v(TAG,product.getName()+" "+product.getPrice());
-                        view.setBackgroundResource(R.drawable.backgroun4ch);
 //                        Log.v(TAG,product.getName()+" "+selectProduct.getName());
+                        list.get(adapterSelectedItem).setSelected(false);
+                        list.get(i).setSelected(true);
+                        adapterSelectedItem=i;
+                        adapter.notifyDataSetChanged();
                         selectedProduct=1;
                         setProduct(product);
                     }
@@ -199,8 +202,11 @@ public class MainActivity extends AppCompatActivity {
               if(item==null){
                 Log.v(TAG,"Ah sani anangi");
               }
-             adapter2.setPosition(i);
-             adapter2.notifyDataSetChanged();
+
+                list2.get(adapterSelectedItem).setSelected(false);
+                list2.get(i).setSelected(true);
+                adapter2SelectedItem=i;
+                adapter2.notifyDataSetChanged();
                 selectedProduct=2;
                 Log.v(TAG,item.toString());
 
