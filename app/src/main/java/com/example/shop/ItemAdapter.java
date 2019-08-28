@@ -20,11 +20,20 @@ public class ItemAdapter extends ArrayAdapter<Product> {
     private  Product item;
     private  ItemAdapter adapter;
     private String reqUrl = "";
+    private Integer position=-1;
 
     public ItemAdapter(Context context, int resource, ArrayList<Product> items,String ip) {
         super(context,resource, items);
         this.adapter=this;
         this.reqUrl="http://"+ip+":8080/application/json/delasosslave/id=";
+    }
+
+    public void setPosition(int posit) {
+        this.position = posit;
+    }
+
+    private int getPosition() {
+        return this.position;
     }
 
     @Override
@@ -36,11 +45,14 @@ public class ItemAdapter extends ArrayAdapter<Product> {
             LayoutInflater inflater =LayoutInflater.from(getContext());
             convertView=inflater.inflate(R.layout.list_item, parent, false);
         }
-        if(item.getSelected()){
-           convertView.setBackgroundResource(R.drawable.backgroun3ch);
+
+
+
+        if(this.position.equals(position) ){
+            convertView.setBackgroundResource(R.drawable.backgroun3ch);
         }
         else{
-           convertView.setBackgroundResource(R.drawable.backgroun3);
+            convertView.setBackgroundResource(R.drawable.backgroun3);
         }
         ((TextView)convertView.findViewById(R.id.item_name)).setText(item.getName());
         ((TextView)convertView.findViewById(R.id.item_count)).setText(item.getCount().toString());

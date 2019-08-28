@@ -1,7 +1,7 @@
 package com.example.shop;
 
 public class Product {
-    private Boolean selected=false;
+
     private Integer putId;
     private Integer id;
     private String name;
@@ -43,13 +43,9 @@ public class Product {
         this.inprice = inprice;
     }
 
-    public Boolean getSelected() {
-        return selected;
-    }
 
-    public void setSelected(Boolean selected) {
-        this.selected = selected;
-    }
+
+
 
     public Integer getIncnt() {
         return incnt;

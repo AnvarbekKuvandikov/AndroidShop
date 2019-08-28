@@ -1,7 +1,6 @@
 package com.example.shop;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,20 @@ public class ProductAdapter extends ArrayAdapter<Product> {
     public ArrayList<Product> list;
     public ArrayList<Product> originalList = new ArrayList<>();
     private CustomFilter filter;
+    private Integer position=-1;
 
 
     public ProductAdapter( Context context, int resource, ArrayList<Product> products) {
         super(context, resource, products);
         list=products;
         originalList.addAll(products);
+    }
+    public void setPosition(int posit) {
+        this.position = posit;
+    }
+
+    private int getPosition() {
+        return this.position;
     }
 
 
@@ -31,12 +38,14 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         LayoutInflater inflater =LayoutInflater.from(getContext());
         convertView=inflater.inflate(R.layout.products_item, parent, false);
 
-        if(product.getSelected()){
-            convertView.setBackgroundColor(Color.BLUE);
+        if(this.position.equals(position) ){
+            convertView.setBackgroundResource(R.drawable.backgroun4ch);
         }
         else{
-            convertView.setBackgroundColor(Color.WHITE);
+            convertView.setBackgroundResource(R.drawable.backgroun4);
         }
+
+
         ((TextView)convertView.findViewById(R.id.product_name)).setText(product.getName());
         ((TextView)convertView.findViewById(R.id.product_prices)).setText("Нархи: "+product.getPrice()+" Сўм");
         ((TextView)convertView.findViewById(R.id.product_inprices)).setText("Ич.нархи: "+product.getInprice()+" Сўм");

@@ -185,10 +185,11 @@ public class MainActivity extends AppCompatActivity {
                         Log.v(TAG,product.getName()+" "+product.getInprice());
                         Log.v(TAG,product.getName()+" "+product.getPrice());
 //                        Log.v(TAG,product.getName()+" "+selectProduct.getName());
-                        list.get(adapterSelectedItem).setSelected(false);
-                        list.get(i).setSelected(true);
-                        adapterSelectedItem=i;
+                        adapter.setPosition(i);
+                        adapter2.setPosition(-1);
                         adapter.notifyDataSetChanged();
+                        adapter2.notifyDataSetChanged();
+
                         selectedProduct=1;
                         setProduct(product);
                     }
@@ -202,11 +203,11 @@ public class MainActivity extends AppCompatActivity {
               if(item==null){
                 Log.v(TAG,"Ah sani anangi");
               }
-
-                list2.get(adapterSelectedItem).setSelected(false);
-                list2.get(i).setSelected(true);
-                adapter2SelectedItem=i;
+                adapter.setPosition(-1);
+                adapter2.setPosition(i);
+                adapter.notifyDataSetChanged();
                 adapter2.notifyDataSetChanged();
+
                 selectedProduct=2;
                 Log.v(TAG,item.toString());
 
@@ -218,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                         if(selectedProduct!=0){
-
+                                            
                                             Integer price_product_count_int=tryParse(price_product_count.getText().toString());
                                             Integer price_inproduct_count_int=tryParse(price_inproduct_count.getText().toString());
 
@@ -335,6 +336,12 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             selectProductView.setText(R.string.product);
+            main_changed1.setBackgroundResource(R.drawable.backgroun4);
+            main_changed2.setBackgroundResource(R.drawable.backgroun4);
+            adapter.setPosition(-1);
+            adapter2.setPosition(-1);
+            adapter.notifyDataSetChanged();
+            adapter2.notifyDataSetChanged();
             selectProduct=product;
         }
         price_product_count.getText().clear();
