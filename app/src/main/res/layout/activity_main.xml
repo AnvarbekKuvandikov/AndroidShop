@@ -63,7 +63,7 @@
   <ListView
       android:id="@+id/listView"
       android:layout_width="match_parent"
-      android:layout_height="140dp"
+      android:layout_height="120dp"
       android:layout_below="@+id/searchView"
       android:layout_marginLeft="8dp"
       android:layout_marginTop="4dp"
@@ -118,7 +118,7 @@
           android:layout_width="60dp"
           android:layout_height="50dp"
           android:ems="10"
-          android:inputType="numberSigned"
+          android:inputType="number"
           android:layout_marginRight="10dp"
           android:layout_marginTop="4dp"
           android:layout_marginBottom="4dp"

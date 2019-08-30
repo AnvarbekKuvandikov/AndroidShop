@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ProductAdapter extends ArrayAdapter<Product> {
@@ -31,6 +32,12 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         return this.position;
     }
 
+    private String getModny(Double DoubleValue){
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+        String formattedValue = decimalFormat.format(DoubleValue);
+        return formattedValue;
+    }
+
 
     @Override
     public View getView(int position, View convertView,ViewGroup parent) {
@@ -47,8 +54,8 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
 
         ((TextView)convertView.findViewById(R.id.product_name)).setText(product.getName());
-        ((TextView)convertView.findViewById(R.id.product_prices)).setText("Нархи: "+product.getPrice()+" Сўм");
-        ((TextView)convertView.findViewById(R.id.product_inprices)).setText("Ич.нархи: "+product.getInprice()+" Сўм");
+        ((TextView)convertView.findViewById(R.id.product_prices)).setText("("+ product.getCount()+" та, "+getModny(product.getPrice())+" Сўм)");
+        ((TextView)convertView.findViewById(R.id.product_inprices)).setText("("+ product.getIncount()+" та, "+getModny(product.getInprice())+" Сўм)");
 
         convertView.setTag(product);
         return convertView;

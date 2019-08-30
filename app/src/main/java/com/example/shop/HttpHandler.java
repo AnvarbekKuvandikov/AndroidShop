@@ -142,7 +142,7 @@ public class HttpHandler {
                         "shtrix": "8803465418203",
                         "incnt": 12
                 }*/
-
+                Log.v("Http",selectedItem.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -42,9 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Product> list;
     private ArrayList<Product> list2;
     private ProductAdapter adapter;
-    private Integer adapterSelectedItem;
     private ItemAdapter adapter2;
-    private Integer adapter2SelectedItem;
     private ImageView save;
     private ImageView calsel;
     private EditText price_product_count;
@@ -56,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     private static Integer asosId;
     private Integer type;
     private Integer haridorId;
-    private Integer indexList2Item;
     private TextView sumPrice;
     private TextView selectProductView;
 
@@ -155,19 +152,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 adapter.getFilter().filter(query);
-//                if (list.contains(query)) {
-//                } else {
-//                    Toast.makeText(MainActivity.this, "Topilmadi !!!", Toast.LENGTH_LONG).show();
-//                }
+                onOneChangedList();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
                 adapter.getFilter().filter(s);
-//                if (list.contains(s)) {
-//                    return  true;
-//                }
+                onOneChangedList();
                 return false;
             }
         });
@@ -176,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                 new AdapterView.OnItemClickListener(){
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                        price_product_count.requestFocus();
                         Product product=(Product)view.getTag();
                         Log.v(TAG,product.getName()+" "+product.getId());
                         Log.v(TAG,product.getName()+" "+product.getPutId());
@@ -199,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
                 new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                price_product_count.requestFocus();
                 Product item=(Product)view.getTag();
               if(item==null){
                 Log.v(TAG,"Ah sani anangi");
@@ -219,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                         if(selectedProduct!=0){
-                                            
+
                                             Integer price_product_count_int=tryParse(price_product_count.getText().toString());
                                             Integer price_inproduct_count_int=tryParse(price_inproduct_count.getText().toString());
 
@@ -232,11 +225,12 @@ public class MainActivity extends AppCompatActivity {
                                                 if(selectedProduct==1){
                                                     Log.v(TAG,"begin AddProduct().execute()");
                                                     new AddProduct().execute();
-                                                    Log.v(TAG,"end AddProduct().execute()");
+                                                    Log.v(TAG,"end AddProduct().execute()"+selectProduct.toString());
                                                 }
                                                 else if(selectedProduct==2){
                                                     new PutProduct().execute();
                                                 }
+                                                searchView.requestFocus();
                                             }
                                             else{
                                                 Toast.makeText(MainActivity.this,"Сонини киритинг !!!",Toast.LENGTH_LONG).show();
@@ -260,6 +254,7 @@ public class MainActivity extends AppCompatActivity {
                             case DialogInterface.BUTTON_POSITIVE:
                                 selectedProduct=0;
                                 setProduct(selectProduct);
+                                searchView.requestFocus();
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
                                 break;
@@ -278,6 +273,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    public  void onOneChangedList(){
+        if(adapter.getCount()==1){
+            adapter.setPosition(0);
+            adapter2.setPosition(-1);
+            adapter.notifyDataSetChanged();
+            adapter2.notifyDataSetChanged();
+
+            selectedProduct=1;
+            setProduct(adapter.getItem(0));
+            price_product_count.requestFocus();
+        }
+        else{
+            adapter.setPosition(-1);
+            adapter2.setPosition(-1);
+            adapter.notifyDataSetChanged();
+            adapter2.notifyDataSetChanged();
+        }
+    }
 
 
     @Override
@@ -313,7 +327,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setProduct(Product product) {
-
+        Product pr=new Product();
+        copyProperties(pr,product);
         if(selectedProduct!=0){
             selectProductView.setText(product.getName());
             if (selectedProduct==2){
@@ -332,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
                 main_changed1.setBackgroundResource(R.drawable.backgroun4ch);
                 main_changed2.setBackgroundResource(R.drawable.backgroun4ch);
             }
-            selectProduct=product;
+            selectProduct=pr;
         }
         else{
             selectProductView.setText(R.string.product);
@@ -342,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
             adapter2.setPosition(-1);
             adapter.notifyDataSetChanged();
             adapter2.notifyDataSetChanged();
-            selectProduct=product;
+            selectProduct=pr;
         }
         price_product_count.getText().clear();
         price_inproduct_count.getText().clear();
@@ -370,6 +385,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void addList(Product product){
+        int index=-1;
+        for (int i = 0; i < list2.size(); i++) {
+            if(list2.get(i).getId().equals(product.getId()) && list2.get(i).getPrice().equals(product.getPrice()) && list2.get(i).getInprice().equals(product.getInprice()) ){
+                index=i;
+                Log.v(TAG,"Index:"+index);
+                break;
+            }
+        }
+        if(index==-1){
+            Product pr=new Product() ;
+            copyProperties(pr,product);
+            list2.add(pr);
+        }
+        else{
+            Integer setCount=((list2.get(index).getCount() + product.getCount())*product.getIncnt()+ (list2.get(index).getIncount()+ product.getIncount())) / product.getIncnt();
+            Integer setInCount=((list2.get(index).getCount() + product.getCount())*product.getIncnt()+ (list2.get(index).getIncount()+ product.getIncount())) % product.getIncnt();
+
+            list2.get(index).setPutId(product.getPutId());
+            list2.get(index).setCount(setCount);
+            list2.get(index).setIncount(setInCount);
+            Log.v(TAG,"pr:"+product.toString());
+
+            for (int i = 0; i < list2.size(); i++) {
+                Log.v(TAG,"list2 exam:"+list2.get(i).toString());
+            }
+        }
+    }
+
+    private void copyProperties(Product productBefore, Product productLast) {
+        productBefore.setPutId(productLast.getPutId());
+        productBefore.setId(productLast.getId());
+        productBefore.setIncount(productLast.getIncount());
+        productBefore.setCount(productLast.getCount());
+        productBefore.setPrice(productLast.getPrice());
+        productBefore.setInprice(productLast.getInprice());
+        productBefore.setIncnt(productLast.getIncnt());
+        productBefore.setShtrix(productLast.getShtrix());
+        productBefore.setName(productLast.getName());
+    }
 
 
     private class AddProduct extends AsyncTask<Void,Void,Void>{
@@ -400,14 +455,18 @@ public class MainActivity extends AppCompatActivity {
             }
             if(i!=0)
                 selectProduct.setPutId(i);
+            if(i<0){
+                Toast.makeText(MainActivity.this,"Сиз танлаган миқдордан "+ (-i)/selectProduct.getIncnt() + " " + (-i) % selectProduct.getIncnt() +" та этмайди !!!",Toast.LENGTH_LONG).show();
+                return;
+            }
             Log.v(TAG, "selectProduct.setPutId: " + i);
 
             selectProductSum = (selectProduct.getPrice() * selectProduct.getCount() + selectProduct.getInprice() * selectProduct.getIncount());
             sum += selectProductSum;
             Log.v(TAG, "list added product:" + selectProduct.toString());
-
-            list2.add(selectProduct);
+            addList(selectProduct);
             adapter2.notifyDataSetChanged();
+
             selectedProduct=0;
             sumPrice.setText("Умуммий сумма: " +sum+" Сўм");
             intent.putExtra("sumprice",sumPrice.getText().toString());
@@ -462,7 +521,9 @@ public class MainActivity extends AppCompatActivity {
                         item.setPrice(object2.getDouble("price"));
                         item.setInprice(object2.getDouble("inprice"));
                         item.setIncnt(object2.getInt("incnt"));
-                        list2.add(item);
+                        Product pr=new Product();
+                        copyProperties(pr,item);
+                        list2.add(pr);
                         Log.v(TAG,"item:"+item.toString());
                     }
                 } catch (JSONException e) {
@@ -532,7 +593,7 @@ public class MainActivity extends AppCompatActivity {
             }
             adapter = new ProductAdapter(MainActivity.this,R.layout.products_item,list);
             listView.setAdapter(adapter);
-
+            onOneChangedList();
 
         }
     }
@@ -565,8 +626,6 @@ public class MainActivity extends AppCompatActivity {
             sum += selectProductSum;
             Log.v(TAG, "list added product:" + selectProduct.toString());
 
-            list2.set(indexList2Item,selectProduct);
-            adapter2.notifyDataSetChanged();
             selectedProduct=0;
 
             sumPrice.setText("Умуммий сумма: " +sum+" Сўм");

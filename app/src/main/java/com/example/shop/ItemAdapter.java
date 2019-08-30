@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ItemAdapter extends ArrayAdapter<Product> {
@@ -34,6 +35,11 @@ public class ItemAdapter extends ArrayAdapter<Product> {
 
     private int getPosition() {
         return this.position;
+    }
+    private String getModny(Double DoubleValue){
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+        String formattedValue = decimalFormat.format(DoubleValue);
+        return formattedValue;
     }
 
     @Override
@@ -57,7 +63,7 @@ public class ItemAdapter extends ArrayAdapter<Product> {
         ((TextView)convertView.findViewById(R.id.item_name)).setText(item.getName());
         ((TextView)convertView.findViewById(R.id.item_count)).setText(item.getCount().toString());
         ((TextView)convertView.findViewById(R.id.item_incount)).setText(item.getIncount().toString());
-        ((TextView)convertView.findViewById(R.id.item_sum)).setText(String.valueOf(item.getCount()*item.getPrice()+item.getIncount()*item.getInprice() ));
+        ((TextView)convertView.findViewById(R.id.item_sum)).setText(getModny(item.getCount()*item.getPrice()+item.getIncount()*item.getInprice() ));
         ((ImageView)convertView.findViewById(R.id.item_delete)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
