@@ -22,11 +22,13 @@ public class ItemAdapter extends ArrayAdapter<Product> {
     private  ItemAdapter adapter;
     private String reqUrl = "";
     private Integer position=-1;
+    private Integer asosId=-1;
 
-    public ItemAdapter(Context context, int resource, ArrayList<Product> items,String ip) {
+    public ItemAdapter(Context context, int resource, ArrayList<Product> items,String ip,Integer asosId) {
         super(context,resource, items);
         this.adapter=this;
-        this.reqUrl="http://"+ip+":8080/application/json/delasosslave/id=";
+        this.reqUrl="http://"+ip+":8080/application/json/delasosslave/asosid=";
+        this.asosId=asosId;
     }
 
     public void setPosition(int posit) {
@@ -107,7 +109,8 @@ public class ItemAdapter extends ArrayAdapter<Product> {
         protected Void doInBackground(Void... voids) {
             HttpHandler httpHandler=new HttpHandler();
             Log.v("myTag",reqUrl);
-            httpHandler.makeServiceDelItem(reqUrl+ item.getPutId());
+            httpHandler.makeServiceDelItem(reqUrl+ asosId+"/id="+item.getId());
+//            +47+"/id="+8
             return null;
         }
 

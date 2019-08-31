@@ -2,6 +2,7 @@ package com.example.shop;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText price_product_count;
     private EditText price_inproduct_count;
     private Product selectProduct;
+    private Product selectProductOnList;
     private static Double selectProductSum=0.0;
     private static Integer selectedProduct=0;
     private static Double sum=0.0;
@@ -145,21 +148,19 @@ public class MainActivity extends AppCompatActivity {
         new GetProducts().execute();
         Log.v(TAG,asosId+"");
 
-        adapter2 = new ItemAdapter(this, R.layout.list_item,list2,ip);
+        adapter2 = new ItemAdapter(this, R.layout.list_item,list2,ip,asosId);
         listView2.setAdapter(adapter2);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 adapter.getFilter().filter(query);
-                onOneChangedList();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
                 adapter.getFilter().filter(s);
-                onOneChangedList();
                 return false;
             }
         });
@@ -168,7 +169,8 @@ public class MainActivity extends AppCompatActivity {
                 new AdapterView.OnItemClickListener(){
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        price_product_count.requestFocus();
+//                        price_product_count.requestFocus();
+                        showSoftKeyboard(price_product_count);
                         Product product=(Product)view.getTag();
                         Log.v(TAG,product.getName()+" "+product.getId());
                         Log.v(TAG,product.getName()+" "+product.getPutId());
@@ -191,7 +193,8 @@ public class MainActivity extends AppCompatActivity {
                 new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                price_product_count.requestFocus();
+//                price_product_count.requestFocus();
+                showSoftKeyboard(price_product_count);
                 Product item=(Product)view.getTag();
               if(item==null){
                 Log.v(TAG,"Ah sani anangi");
@@ -227,10 +230,11 @@ public class MainActivity extends AppCompatActivity {
                                                     new AddProduct().execute();
                                                     Log.v(TAG,"end AddProduct().execute()"+selectProduct.toString());
                                                 }
-                                                else if(selectedProduct==2){
+                                                else if(selectedProduct.equals(2)){
                                                     new PutProduct().execute();
                                                 }
-                                                searchView.requestFocus();
+//                                                searchView.requestFocus();
+                                                showSoftKeyboard(searchView);
                                             }
                                             else{
                                                 Toast.makeText(MainActivity.this,"Сонини киритинг !!!",Toast.LENGTH_LONG).show();
@@ -275,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public  void onOneChangedList(){
+        Log.v(TAG,"onOneChangedList: "+adapter.getCount());
         if(adapter.getCount()==1){
             adapter.setPosition(0);
             adapter2.setPosition(-1);
@@ -286,10 +291,8 @@ public class MainActivity extends AppCompatActivity {
             price_product_count.requestFocus();
         }
         else{
-            adapter.setPosition(-1);
-            adapter2.setPosition(-1);
-            adapter.notifyDataSetChanged();
-            adapter2.notifyDataSetChanged();
+            selectedProduct=0;
+            setProduct(selectProduct);
         }
     }
 
@@ -322,15 +325,24 @@ public class MainActivity extends AppCompatActivity {
         if (scanResult != null) {
             // handle the result
             searchView.setQuery(scanResult.getContents(),false);
+
         }
 
     }
 
     private void setProduct(Product product) {
         Product pr=new Product();
-        copyProperties(pr,product);
         if(selectedProduct!=0){
+            copyProperties(pr,product);
+            selectProductOnList=product;
             selectProductView.setText(product.getName());
+            if(selectProductOnList.getIncnt().equals(1)){
+                price_inproduct_count.setEnabled(false);
+
+            }
+            else{
+                price_inproduct_count.setEnabled(true);
+            }
             if (selectedProduct==2){
                main_changed1.setBackgroundResource(R.drawable.backgroun3ch);
                main_changed2.setBackgroundResource(R.drawable.backgroun3ch);
@@ -400,9 +412,17 @@ public class MainActivity extends AppCompatActivity {
             list2.add(pr);
         }
         else{
-            Integer setCount=((list2.get(index).getCount() + product.getCount())*product.getIncnt()+ (list2.get(index).getIncount()+ product.getIncount())) / product.getIncnt();
-            Integer setInCount=((list2.get(index).getCount() + product.getCount())*product.getIncnt()+ (list2.get(index).getIncount()+ product.getIncount())) % product.getIncnt();
+            Integer setCount;
+            Integer setInCount;
+            if(selectedProduct.equals(2)){
+                 setCount = ( product.getCount() * product.getIncnt() + + product.getIncount() ) / product.getIncnt();
+                 setInCount = (product.getCount() * product.getIncnt() +product.getIncount() ) % product.getIncnt();
 
+            }
+            else {
+                 setCount = ((list2.get(index).getCount() + product.getCount()) * product.getIncnt() + (list2.get(index).getIncount() + product.getIncount())) / product.getIncnt();
+                 setInCount = ((list2.get(index).getCount() + product.getCount()) * product.getIncnt() + (list2.get(index).getIncount() + product.getIncount())) % product.getIncnt();
+            }
             list2.get(index).setPutId(product.getPutId());
             list2.get(index).setCount(setCount);
             list2.get(index).setIncount(setInCount);
@@ -424,6 +444,14 @@ public class MainActivity extends AppCompatActivity {
         productBefore.setIncnt(productLast.getIncnt());
         productBefore.setShtrix(productLast.getShtrix());
         productBefore.setName(productLast.getName());
+    }
+
+    public void showSoftKeyboard(View view) {
+        if (view.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager)
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        }
     }
 
 
@@ -463,6 +491,8 @@ public class MainActivity extends AppCompatActivity {
 
             selectProductSum = (selectProduct.getPrice() * selectProduct.getCount() + selectProduct.getInprice() * selectProduct.getIncount());
             sum += selectProductSum;
+            selectProductOnList.setCount(selectProductOnList.getCount() - selectProduct.getCount());
+            selectProductOnList.setIncount(selectProductOnList.getIncount() - selectProduct.getIncount());
             Log.v(TAG, "list added product:" + selectProduct.toString());
             addList(selectProduct);
             adapter2.notifyDataSetChanged();
@@ -593,13 +623,13 @@ public class MainActivity extends AppCompatActivity {
             }
             adapter = new ProductAdapter(MainActivity.this,R.layout.products_item,list);
             listView.setAdapter(adapter);
-            onOneChangedList();
-
         }
     }
 
     private class PutProduct extends AsyncTask<Void,Void,Void>{
-        private String urlPutProducts="http://"+ip+":8080/application/json/putasosslave";
+        private String urlPutProducts="http://"+ip+":8080/application/json/asosslaveput/asosid="+asosId+"/userid="+thisuUser.getId();
+//        http://localhost:8080/application/json/
+
 
         @Override
         protected void onPreExecute() {
@@ -624,7 +654,11 @@ public class MainActivity extends AppCompatActivity {
             sum -= selectProductSum;
             selectProductSum = (selectProduct.getPrice() * selectProduct.getCount() + selectProduct.getInprice() * selectProduct.getIncount());
             sum += selectProductSum;
+
             Log.v(TAG, "list added product:" + selectProduct.toString());
+
+            addList(selectProduct);
+            adapter2.notifyDataSetChanged();
 
             selectedProduct=0;
 

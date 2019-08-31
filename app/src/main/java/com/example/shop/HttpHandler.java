@@ -171,7 +171,7 @@ public class HttpHandler {
         try {
             URL url=new URL(reqUrl);
             conn = (HttpURLConnection)url.openConnection();
-            conn.setRequestMethod("PUT");
+            conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
             conn.setRequestProperty("Accept", "application/json");
             conn.setDoOutput(true);
@@ -184,6 +184,7 @@ public class HttpHandler {
                 object.put("incount",selectedItem.getIncount());
                 object.put("price",selectedItem.getPrice());
                 object.put("inprice",selectedItem.getInprice());
+                object.put("incnt",selectedItem.getIncnt());
 
             } catch (JSONException e) {
                 e.printStackTrace();
