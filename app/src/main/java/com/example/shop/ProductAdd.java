@@ -36,6 +36,7 @@ public class ProductAdd extends AppCompatActivity {
     EditText for_incount;
     EditText incomingprice;
     ImageView barcodescan;
+    STovar sTovar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +44,22 @@ public class ProductAdd extends AppCompatActivity {
         intent=getIntent();
         saveProduct=findViewById(R.id.product_add_save_product_for_add);
         barcodescan=findViewById(R.id.product_add_barcodescan);
-
+        name=findViewById(R.id.product_add_name);
+        name_short=findViewById(R.id.product_add_name_short);
+        in_count=findViewById(R.id.product_add_in_count);
         barcode1=findViewById(R.id.product_add_barcode1);
         barcode2=findViewById(R.id.product_add_barcode2);
         barcode3=findViewById(R.id.product_add_barcode3);
-
-        barcode1.setText("12", TextView.BufferType.EDITABLE);
+        type1=findViewById(R.id.product_add_type1);
+        type2=findViewById(R.id.product_add_type2);
+        type3=findViewById(R.id.product_add_type3);
+        type4=findViewById(R.id.product_add_type4);
+        type5=findViewById(R.id.product_add_type5);
+        type6=findViewById(R.id.product_add_type6);
+        for_count=findViewById(R.id.product_add_for_count);
+        for_incount=findViewById(R.id.product_add_for_incount);
+        incomingprice=findViewById(R.id.product_add_incomingprice);
+        sTovar=new STovar();
 
         barcodescan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,9 +70,26 @@ public class ProductAdd extends AppCompatActivity {
         saveProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ProductAdd.this,"Ura",Toast.LENGTH_LONG).show();
+
             }
         });
+    }
+
+    private void copyPraporty(STovar sTovar) {
+        sTovar.setNom(name.getText().toString());
+        sTovar.setNom_sh(name_short.getText().toString());
+        sTovar.setKol_in(tryParse(in_count.getText().toString()));
+        sTovar.setShtrix(barcode1.getText().toString());
+        sTovar.setShtrix1(barcode2.getText().toString());
+        sTovar.setShtrix2(barcode3.getText().toString());
+        sTovar.setSotish(Double.parseDouble(type1.getText().toString()) );
+        sTovar.setUlg1(Double.parseDouble(type2.getText().toString()) );
+        sTovar.setUlg2(Double.parseDouble(type3.getText().toString()) );
+        sTovar.setUlg1_pl(Double.parseDouble(type4.getText().toString()) );
+        sTovar.setUlg2_pl(Double.parseDouble(type5.getText().toString()) );
+        sTovar.setBank(Double.parseDouble(type6.getText().toString()) );
+        sTovar.setShtrixkod(1);
+        sTovar.setSena(Double.parseDouble(incomingprice.getText().toString()));
     }
 
     @Override
@@ -72,9 +100,9 @@ public class ProductAdd extends AppCompatActivity {
 
         if (scanResult != null) {
             // handle the result
-               CharSequence c=scanResult.getContents();
-               Log.v("MyTag",""+c);
-              setText(c);
+            CharSequence c=scanResult.getContents();
+            Log.v("MyTag",""+c);
+            setText(c);
         }
 
     }
@@ -82,7 +110,7 @@ public class ProductAdd extends AppCompatActivity {
 
     public void setText(CharSequence sequence){
         if(tryParse(barcode1.getText().toString())==0){
-             barcode1.setText(sequence, TextView.BufferType.EDITABLE);
+            barcode1.setText(sequence, TextView.BufferType.EDITABLE);
         }
         else if(tryParse(barcode2.getText().toString())==0){
             barcode2.setText(sequence, TextView.BufferType.EDITABLE);
@@ -120,7 +148,8 @@ public class ProductAdd extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-
+            HttpHandler httpHandler=new HttpHandler();
+            httpHandler.makeServiceAddNewProducts("",sTovar);
             return null;
         }
         @Override

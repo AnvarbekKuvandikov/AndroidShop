@@ -3,7 +3,10 @@ package com.example.shop;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -28,6 +31,8 @@ public class ProductsList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products_list);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         barcodescan=findViewById(R.id.products_list_barcodescan);
         listView=findViewById(R.id.products_list_list_view);
         searchView=findViewById(R.id.searchView);
@@ -35,12 +40,7 @@ public class ProductsList extends AppCompatActivity {
         stringList=new ArrayList<>();
         barcodeList=new ArrayList<>();
         adapter=new ArrayAdapter<>(this,android.R.layout.simple_dropdown_item_1line, stringList);
-        stringList.add("Дафтар");
-        barcodeList.add("4805058400484");
-        stringList.add("Дафтар");
-        stringList.add("Дафтар");
-        stringList.add("Дафтар");
-        stringList.add("Дафтар");
+
         listView.setAdapter(adapter);
 
 
@@ -67,6 +67,21 @@ public class ProductsList extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.item1) {
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         ZxingOrientResult scanResult =
                 ZxingOrient.parseActivityResult(requestCode, resultCode, intent);
@@ -81,6 +96,16 @@ public class ProductsList extends AppCompatActivity {
             stringList.add(s);
             adapter.notifyDataSetChanged();
         }
+    }
+
+
+    public void setDownIntent(Intent nextIntent) {
+        nextIntent.putExtra("user",intent.getSerializableExtra("user"));
+        nextIntent.putExtra("ip",intent.getStringExtra("ip"));
+        nextIntent.putExtra("asosId",intent.getIntExtra("asosId",0));
+        nextIntent.putExtra("type",intent.getIntExtra("type",0));
+        nextIntent.putExtra("sumprice",intent.getStringExtra("sumprice"));
+        nextIntent.putExtra("stovar",intent.getSerializableExtra("stovar"));
     }
 
     void myFilter(String search){

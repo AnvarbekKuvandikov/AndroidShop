@@ -14,5 +14,9 @@
         android:orderInCategory="100"
         android:title="Сотув"
         />
-
+    <item
+        android:id="@+id/item3"
+        android:orderInCategory="100"
+        android:title="Махсулотлар"
+        />
 </menu>
