@@ -56,8 +56,6 @@ public class TypeChangeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_type_change);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         Button gone=findViewById(R.id.gone);
         type1=findViewById(R.id.type1);
         type2=findViewById(R.id.type2);
@@ -97,26 +95,6 @@ public class TypeChangeActivity extends AppCompatActivity {
         });
 
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.item2) {
-            downActivity();
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
    /* private void saveAutoCompleteTextView(){

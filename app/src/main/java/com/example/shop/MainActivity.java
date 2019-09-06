@@ -308,7 +308,16 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.item1) {
 //           new Finish().execute();
-            downActivity();
+            Intent intent=new Intent(MainActivity.this,TypeChangeActivity.class);
+            setDownIntent(intent);
+            startActivity(intent);
+            finish();
+        }
+        if (id == R.id.item3){
+            Intent intent=new Intent(MainActivity.this,ProductsList.class);
+            setDownIntent(intent);
+            startActivity(intent);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -385,16 +394,16 @@ public class MainActivity extends AppCompatActivity {
         }
         return retVal;
     }
-    private void downActivity(){
-        typeIntent = new Intent(MainActivity.this, TypeChangeActivity.class);
-        typeIntent.putExtra("user",intent.getSerializableExtra("user"));
-        typeIntent.putExtra("ip",intent.getStringExtra("ip"));
-        typeIntent.putExtra("asosId",intent.getIntExtra("asosId",0));
-        typeIntent.putExtra("type",intent.getIntExtra("type",0));
-        typeIntent.putExtra("sumprice",intent.getStringExtra("sumprice"));
-        startActivity(typeIntent);
-        finish();
+
+    public void setDownIntent(Intent nextIntent) {
+        nextIntent.putExtra("user",intent.getSerializableExtra("user"));
+        nextIntent.putExtra("ip",intent.getStringExtra("ip"));
+        nextIntent.putExtra("asosId",intent.getIntExtra("asosId",0));
+        nextIntent.putExtra("type",intent.getIntExtra("type",0));
+        nextIntent.putExtra("sumprice",intent.getStringExtra("sumprice"));
+        nextIntent.putExtra("stovar",intent.getSerializableExtra("stovar"));
     }
+
 
 
     private void addList(Product product){

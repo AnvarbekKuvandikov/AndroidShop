@@ -20,6 +20,7 @@ public class ProductAdd extends AppCompatActivity {
 
     Intent intent;
     Button saveProduct;
+    Button back;
     EditText name;
     EditText name_short;
     EditText in_count;
@@ -37,11 +38,15 @@ public class ProductAdd extends AppCompatActivity {
     EditText incomingprice;
     ImageView barcodescan;
     STovar sTovar;
+    User thisUser;
+    String ip="192.168.1.100";
+    Integer barcode=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_add);
         intent=getIntent();
+        back=findViewById(R.id.product_add_back);
         saveProduct=findViewById(R.id.product_add_save_product_for_add);
         barcodescan=findViewById(R.id.product_add_barcodescan);
         name=findViewById(R.id.product_add_name);
@@ -59,8 +64,14 @@ public class ProductAdd extends AppCompatActivity {
         for_count=findViewById(R.id.product_add_for_count);
         for_incount=findViewById(R.id.product_add_for_incount);
         incomingprice=findViewById(R.id.product_add_incomingprice);
-        sTovar=new STovar();
+        ip=intent.getStringExtra("ip");
+        thisUser=(User) intent.getSerializableExtra("user");
+        sTovar=(STovar) intent.getSerializableExtra("stovar");
 
+        if(sTovar != null){
+            Log.v("MyTag",sTovar.toString());
+            copyPraporty(sTovar);
+        }
         barcodescan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,12 +81,25 @@ public class ProductAdd extends AppCompatActivity {
         saveProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                copyPraporty();
+                new AddNewProduct().execute();
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(ProductAdd.this,ProductsList.class);
+                setDownIntent(intent);
+                startActivity(intent);
+                finish();
             }
         });
     }
 
-    private void copyPraporty(STovar sTovar) {
+    private void copyPraporty() {
+        if (sTovar == null){
+            sTovar =new STovar();
+        }
         sTovar.setNom(name.getText().toString());
         sTovar.setNom_sh(name_short.getText().toString());
         sTovar.setKol_in(tryParse(in_count.getText().toString()));
@@ -89,8 +113,33 @@ public class ProductAdd extends AppCompatActivity {
         sTovar.setUlg2_pl(Double.parseDouble(type5.getText().toString()) );
         sTovar.setBank(Double.parseDouble(type6.getText().toString()) );
         sTovar.setShtrixkod(1);
-        sTovar.setSena(Double.parseDouble(incomingprice.getText().toString()));
+//        sTovar.setSena(Double.parseDouble(incomingprice.getText().toString()));
     }
+    private void copyPraporty(STovar tovar) {
+        name.setText(tovar.getNom());
+        name_short.setText(tovar.getNom_sh());
+        in_count.setText(tovar.getKol_in().toString());
+        if(!tovar.getShtrix().equals("")){
+            barcode=1;
+        }
+        if(!tovar.getShtrix1().equals("")){
+            barcode=2;
+        }
+        if(!tovar.getShtrix2().equals("")){
+            barcode=3;
+        }
+        barcode1.setText(tovar.getShtrix());
+        barcode2.setText(tovar.getShtrix1());
+        barcode3.setText(tovar.getShtrix2());
+        type1.setText(tovar.getSotish().toString());
+        type2.setText(tovar.getUlg1().toString());
+        type3.setText(tovar.getUlg2().toString());
+        type4.setText(sTovar.getUlg1_pl().toString());
+        type5.setText(tovar.getUlg2_pl().toString());
+        type6.setText(tovar.getBank().toString() );
+//        incomingprice.setText(tovar.getSena().intValue());
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
@@ -109,14 +158,17 @@ public class ProductAdd extends AppCompatActivity {
 
 
     public void setText(CharSequence sequence){
-        if(tryParse(barcode1.getText().toString())==0){
+        if(barcode==0){
             barcode1.setText(sequence, TextView.BufferType.EDITABLE);
+            barcode=1;
         }
-        else if(tryParse(barcode2.getText().toString())==0){
+        else if(barcode==1){
             barcode2.setText(sequence, TextView.BufferType.EDITABLE);
+            barcode=2;
         }
-        else  if(tryParse(barcode3.getText().toString())==0){
+        else  if(barcode==2){
             barcode3.setText(sequence, TextView.BufferType.EDITABLE);
+            barcode=3;
         }
         else {
             Toast.makeText(this,"Барча штрих қодлар банд",Toast.LENGTH_LONG).show();
@@ -131,6 +183,14 @@ public class ProductAdd extends AppCompatActivity {
             retVal = 0; // or null if that is your preference
         }
         return retVal;
+    }
+    public void setDownIntent(Intent nextIntent) {
+        nextIntent.putExtra("user",intent.getSerializableExtra("user"));
+        nextIntent.putExtra("ip",intent.getStringExtra("ip"));
+        nextIntent.putExtra("asosId",intent.getIntExtra("asosId",0));
+        nextIntent.putExtra("type",intent.getIntExtra("type",0));
+        nextIntent.putExtra("sumprice",intent.getStringExtra("sumprice"));
+        nextIntent.putExtra("stovar",intent.getSerializableExtra("stovar"));
     }
 
     private  class AddNewProduct extends AsyncTask<Void,Void,Void>{
@@ -149,7 +209,8 @@ public class ProductAdd extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             HttpHandler httpHandler=new HttpHandler();
-            httpHandler.makeServiceAddNewProducts("",sTovar);
+            String reqUrl="http://"+ip+":8080/application/json/addproduct";
+            httpHandler.makeServiceAddNewProducts(reqUrl,sTovar,thisUser);
             return null;
         }
         @Override
@@ -157,12 +218,10 @@ public class ProductAdd extends AppCompatActivity {
             super.onPostExecute(aVoid);
             if(progressDialog.isShowing())
                 progressDialog.dismiss();
-            Intent nextIntent = new Intent(ProductAdd.this, TypeChangeActivity.class);
-            nextIntent.putExtra("user",intent.getSerializableExtra("user"));
-            nextIntent.putExtra("ip",intent.getStringExtra("ip"));
-            nextIntent.putExtra("asosId",intent.getIntExtra("asosId",0));
-            nextIntent.putExtra("type",intent.getIntExtra("type",0));
+            Intent nextIntent = new Intent(ProductAdd.this, ProductsList.class);
+            setDownIntent(nextIntent);
             startActivity(nextIntent);
+            finish();
         }
     }
 

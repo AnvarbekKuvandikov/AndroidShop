@@ -293,6 +293,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/product_add_back"
             android:layout_margin="10dp"
             android:background="@drawable/backgroun2"
             android:layout_width="wrap_content"

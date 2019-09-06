@@ -65,7 +65,7 @@ public class HttpHandler {
     }
 
 
-    public Integer makeServiceAddNewProducts(String reqUrl, STovar newProducts){
+    public Integer makeServiceAddNewProducts(String reqUrl, STovar newProducts,User user){
         HttpURLConnection conn= null;
         try {
             URL url=new URL(reqUrl);
@@ -74,7 +74,31 @@ public class HttpHandler {
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
             conn.setRequestProperty("Accept", "application/json");
             conn.setDoOutput(true);
-            JSONObject object=new JSONObject(newProducts.toString());
+            JSONObject object=new JSONObject();
+            object.put ("nom",newProducts.getNom());
+            object.put ("nom_sh",newProducts.getNom_sh());
+            object.put ("shtrix",newProducts.getShtrix());
+            object.put ("shtrix1",newProducts.getShtrix1());
+            object.put ("shtrix2",newProducts.getShtrix2());
+            object.put ("brend",0);
+            object.put ("papka",0);
+            object.put ("shtrixkod",1);
+            object.put ("qrkod",0);
+            object.put ("izm_id",1);
+            object.put ("del_flag",0);
+            object.put("client_id",user.getClientId());
+            object.put ("brend",0);
+            object.put ("sotish",newProducts.getSotish());
+            object.put ("ulg1",newProducts.getUlg1());
+            object.put ("ulg2",newProducts.getUlg2());
+            object.put ("ulg1_pl",newProducts.getUlg1_pl());
+            object.put ("ulg2_pl",newProducts.getUlg2_pl());
+            object.put ("bank",newProducts.getBank());
+            object.put("sena",newProducts.getSena());
+            object.put ("kol_in",newProducts.getKol_in());
+            object.put ("sena_d",newProducts.getSena_d());
+            object.put ("sena_in_d",newProducts.getSena_in_d());
+
 
             String jsonInputString=object.toString();
             OutputStream os=conn.getOutputStream();
@@ -91,9 +115,9 @@ public class HttpHandler {
 
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.v("MyTag",e.getMessage());
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.v("MyTag",e.getMessage());
         }
         return 0;
     }
