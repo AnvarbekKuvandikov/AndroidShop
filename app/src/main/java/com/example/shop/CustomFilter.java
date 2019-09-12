@@ -52,6 +52,9 @@ public class CustomFilter extends Filter {
                     if(filterList.get(i).getShtrix().equals(charSequence)){
                         filteredMovies.add(filterList.get(i));
                     }
+                    if(filterList.get(i).getShtrix_full().equals(charSequence)){
+                        filteredMovies.add(filterList.get(i));
+                    }
                 }
             }
 

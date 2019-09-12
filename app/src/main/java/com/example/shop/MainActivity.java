@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Сотув");
         setSupportActionBar(toolbar);
         barcodeImageView=findViewById(R.id.action_image_barcode);
         sumPrice=(TextView)findViewById(R.id.sum_price);
@@ -613,6 +614,7 @@ public class MainActivity extends AppCompatActivity {
                         product.setIncnt(object.getInt("incnt"));
                         product.setSena_d(object.getDouble("sena_d"));
                         product.setSena_in_d(object.getDouble("sena_in_d"));
+                        product.setShtrix_full(object.getString("shtrix_full"));
 //                        Log.v(TAG,"selectProduct Id:"+product.toString());
 
                         list.add(product);

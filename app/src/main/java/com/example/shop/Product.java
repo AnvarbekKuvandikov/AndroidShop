@@ -13,6 +13,7 @@ public class Product {
     private Integer incnt;
     private  Double sena_d;
     private  Double sena_in_d;
+    private  String shtrix_full;
 
     public Product() {
     }
@@ -45,6 +46,14 @@ public class Product {
         this.inprice = inprice;
     }
 
+
+    public String getShtrix_full() {
+        return shtrix_full;
+    }
+
+    public void setShtrix_full(String shtrix_full) {
+        this.shtrix_full = shtrix_full;
+    }
 
     public Double getSena_d() {
         return sena_d;

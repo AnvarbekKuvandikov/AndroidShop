@@ -47,6 +47,7 @@ public class ProductsList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Махсулотлар");
         setSupportActionBar(toolbar);
         add=findViewById(R.id.products_list_input_add);
         barcodescan=findViewById(R.id.products_list_barcodescan);
