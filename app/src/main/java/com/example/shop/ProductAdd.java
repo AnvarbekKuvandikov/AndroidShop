@@ -1,6 +1,8 @@
 package com.example.shop;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -70,7 +72,7 @@ public class ProductAdd extends AppCompatActivity {
         sTovar=(STovar) intent.getSerializableExtra("stovar");
 
         if(sTovar != null){
-            Log.v("MyTag:",sTovar.toString());
+            Log.v("MyTag$",sTovar.toString());
             copyPraporty(sTovar);
         }
         else {
@@ -104,16 +106,20 @@ public class ProductAdd extends AppCompatActivity {
 
         sTovar.setNom(name.getText().toString());
         sTovar.setNom_sh(name_short.getText().toString());
-        sTovar.setKol_in(tryParse(in_count.getText().toString()));
+        Integer kol_in=tryParse(in_count.getText().toString());
+        if (kol_in==0)
+            kol_in++;
+
+        sTovar.setKol_in(kol_in);
         sTovar.setShtrix(barcode1.getText().toString());
         sTovar.setShtrix1(barcode2.getText().toString());
         sTovar.setShtrix2(barcode3.getText().toString());
-        sTovar.setSotish(Double.parseDouble(type1.getText().toString()) );
-        sTovar.setUlg1(Double.parseDouble(type2.getText().toString()) );
-        sTovar.setUlg2(Double.parseDouble(type3.getText().toString()) );
-        sTovar.setUlg1_pl(Double.parseDouble(type4.getText().toString()) );
-        sTovar.setUlg2_pl(Double.parseDouble(type5.getText().toString()) );
-        sTovar.setBank(Double.parseDouble(type6.getText().toString()) );
+        sTovar.setSotish(tryParseDouble(type1.getText().toString() ) );
+        sTovar.setUlg1(tryParseDouble(type2.getText().toString()) );
+        sTovar.setUlg2(tryParseDouble(type3.getText().toString()) );
+        sTovar.setUlg1_pl(tryParseDouble(type4.getText().toString()) );
+        sTovar.setUlg2_pl(tryParseDouble(type5.getText().toString()) );
+        sTovar.setBank(tryParseDouble(type6.getText().toString()) );
         sTovar.setShtrixkod(1);
 //        sTovar.setSena(Double.parseDouble(incomingprice.getText().toString()));
     }
@@ -159,6 +165,25 @@ public class ProductAdd extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        finish();
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProductAdd.this);
+        builder.setMessage("Дастурдан чикишни истайсизми?").setPositiveButton("Ха", dialogClickListener)
+                .setNegativeButton("Йўқ", dialogClickListener).show();
+    }
 
     public void setText(CharSequence sequence){
         if(barcode==0){
@@ -184,6 +209,15 @@ public class ProductAdd extends AppCompatActivity {
             retVal = Integer.parseInt((String) obj);
         } catch (NumberFormatException nfe) {
             retVal = 0; // or null if that is your preference
+        }
+        return retVal;
+    }
+    public Double tryParseDouble(Object obj) {
+        Double retVal;
+        try {
+            retVal = Double.parseDouble((String) obj);
+        } catch (NumberFormatException nfe) {
+            retVal = 0.0; // or null if that is your preference
         }
         return retVal;
     }

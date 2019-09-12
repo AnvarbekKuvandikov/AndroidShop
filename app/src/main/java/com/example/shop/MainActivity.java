@@ -148,8 +148,6 @@ public class MainActivity extends AppCompatActivity {
         new GetProducts().execute();
         Log.v(TAG,asosId+"");
 
-        adapter2 = new ItemAdapter(this, R.layout.list_item,list2,ip,asosId);
-        listView2.setAdapter(adapter2);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -323,7 +321,25 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        finish();
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Дастурдан чикишни истайсизми?").setPositiveButton("Ха", dialogClickListener)
+                .setNegativeButton("Йўқ", dialogClickListener).show();
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
@@ -634,6 +650,8 @@ public class MainActivity extends AppCompatActivity {
             }
             adapter = new ProductAdapter(MainActivity.this,R.layout.products_item,list);
             listView.setAdapter(adapter);
+            adapter2 = new ItemAdapter(MainActivity.this, R.layout.list_item,list2,ip,asosId);
+            listView2.setAdapter(adapter2);
         }
     }
 

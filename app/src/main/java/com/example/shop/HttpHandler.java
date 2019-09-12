@@ -75,6 +75,7 @@ public class HttpHandler {
             conn.setRequestProperty("Accept", "application/json");
             conn.setDoOutput(true);
             JSONObject object=new JSONObject();
+            object.put("id",newProducts.getId());
             object.put ("nom",newProducts.getNom());
             object.put ("nom_sh",newProducts.getNom_sh());
             object.put ("shtrix",newProducts.getShtrix());
