@@ -595,6 +595,8 @@ public class MainActivity extends AppCompatActivity {
                         product.setInprice(object.getDouble("inprice"));
                         product.setShtrix(object.getString("shtrix"));
                         product.setIncnt(object.getInt("incnt"));
+                        product.setSena_d(object.getDouble("sena_d"));
+                        product.setSena_in_d(object.getDouble("sena_in_d"));
 //                        Log.v(TAG,"selectProduct Id:"+product.toString());
 
                         list.add(product);

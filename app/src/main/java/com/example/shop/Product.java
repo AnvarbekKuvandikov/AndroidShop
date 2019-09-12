@@ -11,6 +11,8 @@ public class Product {
     private Integer incount;
     private  String shtrix;
     private Integer incnt;
+    private  Double sena_d;
+    private  Double sena_in_d;
 
     public Product() {
     }
@@ -44,8 +46,21 @@ public class Product {
     }
 
 
+    public Double getSena_d() {
+        return sena_d;
+    }
 
+    public void setSena_d(Double sena_d) {
+        this.sena_d = sena_d;
+    }
 
+    public Double getSena_in_d() {
+        return sena_in_d;
+    }
+
+    public void setSena_in_d(Double sena_in_d) {
+        this.sena_in_d = sena_in_d;
+    }
 
     public Integer getIncnt() {
         return incnt;

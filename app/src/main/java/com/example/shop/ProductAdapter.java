@@ -55,7 +55,8 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
         ((TextView)convertView.findViewById(R.id.product_name)).setText(product.getName());
         ((TextView)convertView.findViewById(R.id.product_prices)).setText("("+ product.getCount()+" та, "+getModny(product.getPrice())+" Сўм)");
-        ((TextView)convertView.findViewById(R.id.product_inprices)).setText("("+ product.getIncount()+" та, "+getModny(product.getInprice())+" Сўм)");
+//        ((TextView)convertView.findViewById(R.id.product_inprices)).setText("("+ product.getIncount()+" та, "+getModny(product.getInprice())+" Сўм)");
+        ((TextView)convertView.findViewById(R.id.product_inprices)).setText( "( " +getModny(product.getSena_d())+" =)");
 
         convertView.setTag(product);
         return convertView;

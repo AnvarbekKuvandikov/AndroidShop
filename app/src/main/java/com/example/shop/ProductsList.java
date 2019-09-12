@@ -64,9 +64,11 @@ public class ProductsList extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(ProductsList.this,ProductAdd.class);
-                setDownIntent(intent);
-                startActivity(intent);
+                Intent nextintent=new Intent(ProductsList.this,ProductAdd.class);
+                STovar tovar = null;
+                intent.putExtra("stovar",tovar);
+                setDownIntent(nextintent);
+                startActivity(nextintent);
                 finish();
             }
         });

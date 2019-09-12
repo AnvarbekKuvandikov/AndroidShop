@@ -41,6 +41,7 @@ public class ProductAdd extends AppCompatActivity {
     User thisUser;
     String ip="192.168.1.100";
     Integer barcode=0;
+    Integer update=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,8 +70,11 @@ public class ProductAdd extends AppCompatActivity {
         sTovar=(STovar) intent.getSerializableExtra("stovar");
 
         if(sTovar != null){
-            Log.v("MyTag",sTovar.toString());
+            Log.v("MyTag:",sTovar.toString());
             copyPraporty(sTovar);
+        }
+        else {
+            sTovar=new STovar();
         }
         barcodescan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,9 +101,7 @@ public class ProductAdd extends AppCompatActivity {
     }
 
     private void copyPraporty() {
-        if (sTovar == null){
-            sTovar =new STovar();
-        }
+
         sTovar.setNom(name.getText().toString());
         sTovar.setNom_sh(name_short.getText().toString());
         sTovar.setKol_in(tryParse(in_count.getText().toString()));
@@ -116,6 +118,7 @@ public class ProductAdd extends AppCompatActivity {
 //        sTovar.setSena(Double.parseDouble(incomingprice.getText().toString()));
     }
     private void copyPraporty(STovar tovar) {
+        update=1;
         name.setText(tovar.getNom());
         name_short.setText(tovar.getNom_sh());
         in_count.setText(tovar.getKol_in().toString());
@@ -210,7 +213,8 @@ public class ProductAdd extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             HttpHandler httpHandler=new HttpHandler();
             String reqUrl="http://"+ip+":8080/application/json/addproduct";
-            httpHandler.makeServiceAddNewProducts(reqUrl,sTovar,thisUser);
+            Integer x=httpHandler.makeServiceAddNewProducts(reqUrl,sTovar,thisUser);
+            Log.v("MyTag:",x+" sTovar:"+sTovar.toString());
             return null;
         }
         @Override
