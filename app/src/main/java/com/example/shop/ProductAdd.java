@@ -143,7 +143,7 @@ public class ProductAdd extends AppCompatActivity {
         type1.setText(tovar.getSotish().toString());
         type2.setText(tovar.getUlg1().toString());
         type3.setText(tovar.getUlg2().toString());
-        type4.setText(sTovar.getUlg1_pl().toString());
+        type4.setText(tovar.getUlg1_pl().toString());
         type5.setText(tovar.getUlg2_pl().toString());
         type6.setText(tovar.getBank().toString() );
         incomingprice.setText(tovar.getSena().toString());
