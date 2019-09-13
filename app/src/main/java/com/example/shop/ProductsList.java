@@ -220,7 +220,7 @@ public class ProductsList extends AppCompatActivity {
                         tovar.setUlg1_pl(object.getDouble("ulg1_pl"));
                         tovar.setUlg2_pl(object.getDouble("ulg2_pl"));
                         tovar.setBank(object.getDouble("bank"));
-//                        tovar.setSena(object.getDouble("sena"));
+                        tovar.setSena(object.getDouble("sena"));
                         tovar.setKol_in(object.getInt("kol_in"));
                         tovar.setSena_d(object.getDouble("sena_d"));
                         tovar.setSena_in_d(object.getDouble("sena_in_d"));

@@ -121,6 +121,10 @@ public class STovarAdapter  extends ArrayAdapter<STovar> {
                         if(filterList.get(i).getShtrix2().equals(charSequence)){
                             filteredMovies.add(filterList.get(i));
                         }
+                        if(filterList.get(i).getShtrix_full().equals(charSequence)){
+                            filteredMovies.add(filterList.get(i));
+                        }
+
 
                     }
                 }

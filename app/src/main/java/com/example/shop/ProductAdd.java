@@ -121,7 +121,7 @@ public class ProductAdd extends AppCompatActivity {
         sTovar.setUlg2_pl(tryParseDouble(type5.getText().toString()) );
         sTovar.setBank(tryParseDouble(type6.getText().toString()) );
         sTovar.setShtrixkod(1);
-//        sTovar.setSena(Double.parseDouble(incomingprice.getText().toString()));
+        sTovar.setSena(tryParseDouble(incomingprice.getText().toString()));
     }
     private void copyPraporty(STovar tovar) {
         update=1;
@@ -146,7 +146,7 @@ public class ProductAdd extends AppCompatActivity {
         type4.setText(sTovar.getUlg1_pl().toString());
         type5.setText(tovar.getUlg2_pl().toString());
         type6.setText(tovar.getBank().toString() );
-//        incomingprice.setText(tovar.getSena().intValue());
+        incomingprice.setText(tovar.getSena().toString());
     }
 
 
