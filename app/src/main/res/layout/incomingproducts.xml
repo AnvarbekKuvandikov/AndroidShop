@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/accent"
+    tools:context=".IncomingProducts">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="4dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:ems="4"
+            android:layout_weight="4"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:text="Номер: "/>
+
+        <EditText
+            android:id="@+id/incoming_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:ems="10"
+            android:layout_weight="6"
+            android:background="@drawable/backgroun"
+            android:inputType="number" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="4dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:ems="4"
+            android:layout_weight="4"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:text="Сана: "/>
+        <EditText
+        android:id="@+id/incoming_date"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:layout_weight="6"
+        android:background="@drawable/backgroun"
+        android:inputType="date" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="4dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:ems="4"
+            android:layout_weight="4"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:text="Таминотчи: "/>
+
+       <AutoCompleteTextView
+           android:id="@+id/incoming_client"
+           android:layout_width="wrap_content"
+           android:layout_height="40dp"
+           android:ems="10"
+           android:layout_weight="6"
+           android:background="@drawable/backgroun"
+           />
+
+    </LinearLayout>
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Доллар"
+        android:textColor="@color/colorAccent"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+        android:layout_marginBottom="10dp"
+
+        />
+
+
+
+</LinearLayout>
