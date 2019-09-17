@@ -25,7 +25,7 @@
             android:text="Номер: "/>
 
         <EditText
-            android:id="@+id/incoming_phone"
+            android:id="@+id/incoming_num"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:ems="10"
@@ -89,17 +89,69 @@
 
     </LinearLayout>
 
-    <RadioButton
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Доллар"
-        android:textColor="@color/colorAccent"
-        android:layout_marginLeft="100dp"
-        android:layout_marginRight="100dp"
-        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        android:layout_margin="4dp"
+        >
+        <RadioButton
+            android:id="@+id/incoming_dollar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:ems="4"
+            android:textColor="@color/colorAccent"
+            android:text="Доллар"
 
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:ems="10"
+            android:textAlignment="center"
+            android:text="4800 $"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        >
+        <Button
+            android:id="@+id/incoming_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/backgroun2"
+            android:textColor="@color/accent"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:text="Бекор қилиш" />
+
+        <Button
+            android:id="@+id/incoming_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/backgroun2"
+            android:textColor="@color/accent"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:text="Сақлаш" />
+
+
+    </LinearLayout>
+
+
+
+    <ListView
+        android:id="@+id/incoming_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         />
-
 
 
 </LinearLayout>
