@@ -318,6 +318,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+        if (id == R.id.item4){
+            Intent intent=new Intent(MainActivity.this,IncomingProducts.class);
+            setDownIntent(intent);
+            startActivity(intent);
+            finish();
+        }
+
 
         return super.onOptionsItemSelected(item);
     }

@@ -125,6 +125,13 @@ public class ProductsList extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+        if (id == R.id.item4){
+            Intent intent=new Intent(ProductsList.this,IncomingProducts.class);
+            setDownIntent(intent);
+            startActivity(intent);
+            finish();
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
