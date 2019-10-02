@@ -64,6 +64,74 @@ public class HttpHandler {
 
     }
 
+    public String makeServiceCreate(String reqUrl,AsosModell asosModell){
+        String response=null;
+        try{
+            URL url=new URL(reqUrl);
+            HttpURLConnection conn=(HttpURLConnection)url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+
+            Log.v("Http",asosModell.getUserId()+"");
+            JSONObject jsonParam = new JSONObject();
+            jsonParam.put("clientId", asosModell.getClientId());
+            jsonParam.put("userId", asosModell.getUserId());
+            jsonParam.put("xodimId", asosModell.getXodimId());
+            jsonParam.put("haridorId", asosModell.getHaridorId());
+            jsonParam.put("sana", asosModell.getSana());
+            jsonParam.put("dilerId", asosModell.getDilerId());
+            jsonParam.put("turOper", asosModell.getTurOper());
+            jsonParam.put("sotuvTuri", asosModell.getSotuv_turi());
+            jsonParam.put("nomer", asosModell.getNomer());
+            jsonParam.put("del_flag", asosModell.getDel_flag());
+            jsonParam.put("dollar", asosModell.getDollar());
+            jsonParam.put("kurs", asosModell.getKurs());
+            jsonParam.put("sum_d", asosModell.getSum_d());
+             /*{
+
+                    "clientId": 4,
+                    "userId": 30,
+                    "xodimId": 10,
+                    "haridorId": 0,
+                    "sana": "",
+                    "dilerId": 1,
+                    "turOper": 2,
+                    "summa": 4500.0,
+                    "sotuvTuri": 1,
+                    "nomer": "4521",
+                    "del_flag": 1,
+                    "dollar": 4526,
+                    "kurs": 1,
+                    "sum_d": 1452,
+                    "kol": 2
+
+            }
+*/
+
+            conn.setConnectTimeout(15000);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.connect();
+            OutputStream os =conn.getOutputStream();
+            os.write(jsonParam.toString().getBytes());
+            os.flush();
+            os.close();
+
+            InputStream in=new BufferedInputStream(conn.getInputStream());
+            response=convertStreamToString(in);
+            conn.disconnect();
+        } catch (ProtocolException e) {
+            Log.v(TAG,"ProtocolExceptio: "+e.getMessage());
+        } catch (MalformedURLException e) {
+            Log.v(TAG,"MalformedURLException: "+e.getMessage());
+        } catch (IOException e) {
+            Log.v(TAG,"IOException: "+e.getMessage());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return response;
+
+    }
+
 
     public Integer makeServiceAddNewProducts(String reqUrl, STovar newProducts,User user){
         HttpURLConnection conn= null;

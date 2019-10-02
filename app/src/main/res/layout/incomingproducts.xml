@@ -81,7 +81,7 @@
             android:textColor="@color/colorAccent" />
 
         <AutoCompleteTextView
-            android:id="@+id/incoming_client"
+            android:id="@+id/incoming_diller"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_weight="6"
@@ -96,7 +96,7 @@
         android:layout_margin="4dp"
         android:orientation="horizontal">
 
-        <RadioButton
+        <CheckBox
             android:id="@+id/incoming_dollar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -163,7 +163,7 @@
             app:srcCompat="@android:drawable/ic_input_add" />
 
         <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/incoming_save"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_weight="1"
