@@ -17,8 +17,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -47,10 +49,15 @@ public class IncomingAdd extends AppCompatActivity {
     private User thisuUser;
     private Integer asosId;
     private STovar tovar;
+    private Product selectProduct;
     private ImageView save;
     private static Integer selectedProduct=0;
     private EditText count;
     private EditText incount;
+    private LinearLayout main_changed1;
+    private LinearLayout main_changed2;
+    private Product product;
+    private TextView selectProductView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +75,10 @@ public class IncomingAdd extends AppCompatActivity {
         listView2=findViewById(R.id.product_incoming_add_list_view2);
         searchView=findViewById(R.id.product_incoming_add_searchView);
         intent=getIntent();
-        intent.putExtra("ip","192.168.43.52");
+        main_changed1=findViewById(R.id.linerLayout1);
+        main_changed2=findViewById(R.id.linerLayout2);
+        selectProductView=findViewById(R.id.select_product);
+        /*intent.putExtra("ip","192.168.43.52");
         User user=new User();
         user.setId(30);
         user.setUsername("K.Begiev");
@@ -76,7 +86,7 @@ public class IncomingAdd extends AppCompatActivity {
         user.setDelFlag(0);
         intent.putExtra("user",user);
         intent.putExtra("asosId",1821);
-
+*/
         ip=intent.getStringExtra("ip");
         asosId=intent.getIntExtra("asosId",0);
         thisuUser=(User) intent.getSerializableExtra("user");
@@ -108,8 +118,15 @@ public class IncomingAdd extends AppCompatActivity {
                 STovar stovar=(STovar) view.getTag();
                 if (stovar != null){
                     tovar=stovar;
+                    selectedProduct=1;
                     Log.v("MyTag",tovar.toString());
                 }
+            }
+        });
+        listView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                product=(Product)view.getTag();
             }
         });
         save.setOnClickListener(new View.OnClickListener() {
@@ -126,11 +143,13 @@ public class IncomingAdd extends AppCompatActivity {
                 product.setPrice(tovar.getSotish());
                 product.setInprice(0.0);
                 product.setIncnt(tovar.getKol_in());
+                selectProduct=product;
+                new AddProduct().execute();
                 list2.add(product);
                 Log.v("MyTag",product.toString());
                 Log.v("MyTag",list2.size()+"");
                 adapter2.notifyDataSetChanged();
-                
+                selectedProduct=0;
              }
         });
 
@@ -214,6 +233,46 @@ public class IncomingAdd extends AppCompatActivity {
     }
 
 
+    private void selectProduct() {
+        if(selectedProduct!=0){
+            if(selectProduct.getIncnt().equals(1) && tovar.getKol_in().equals(1)){
+                count.setEnabled(false);
+            }
+            else{
+                incount.setEnabled(true);
+            }
+            if (selectedProduct==2){
+                main_changed1.setBackgroundResource(R.drawable.backgroun3ch);
+                main_changed2.setBackgroundResource(R.drawable.backgroun3ch);
+                if(product.getCount()>0){
+                    CharSequence c=""+product.getCount();
+                    count.setText(c,EditText.BufferType.EDITABLE);
+                }
+                if(product.getIncount()>0){
+                    CharSequence c=""+product.getIncount();
+                    incount.setText(c,EditText.BufferType.EDITABLE);
+                }
+            }
+            else{
+                main_changed1.setBackgroundResource(R.drawable.backgroun4ch);
+                main_changed2.setBackgroundResource(R.drawable.backgroun4ch);
+            }
+        }
+        else{
+            selectProductView.setText(R.string.product);
+            main_changed1.setBackgroundResource(R.drawable.backgroun4);
+            main_changed2.setBackgroundResource(R.drawable.backgroun4);
+            adapter.setPosition(-1);
+            adapter2.setPosition(-1);
+            adapter.notifyDataSetChanged();
+            adapter2.notifyDataSetChanged();
+        }
+        count.getText().clear();
+        incount.getText().clear();
+
+    }
+
+
     private void copyProperties(Product productBefore, Product productLast) {
         productBefore.setPutId(productLast.getPutId());
         productBefore.setId(productLast.getId());
@@ -235,6 +294,39 @@ public class IncomingAdd extends AppCompatActivity {
         return retVal;
     }
 
+
+    private class AddProduct extends AsyncTask<Void,Void,Void>{
+        String urlRequest="http://"+ip+":8080/application/json/asosslave2/asosid="+asosId+"/userid="+thisuUser.getId();
+        Integer i=0;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog=new ProgressDialog(IncomingAdd.this);
+            progressDialog.setMessage("Малумот сақланяпти");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HttpHandler httpHandler=new HttpHandler();
+            i=httpHandler.makeServiceAddProduct(urlRequest,selectProduct);
+            Log.v("TAG","makeServiceAddProduct: "+i);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(progressDialog.isShowing()){
+                progressDialog.dismiss();
+            }
+            if(i!=0)
+                selectProduct.setPutId(i);
+
+        }
+
+    }
 
 
     private class GetProducts extends AsyncTask<Void, Void, Void> {

@@ -118,6 +118,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/incoming_add_product_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"

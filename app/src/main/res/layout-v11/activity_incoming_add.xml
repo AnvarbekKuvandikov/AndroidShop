@@ -48,7 +48,7 @@
     <ListView
         android:id="@+id/product_incoming_add_list_view"
         android:layout_width="match_parent"
-        android:layout_height="218dp"
+        android:layout_height="163dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginRight="8dp"

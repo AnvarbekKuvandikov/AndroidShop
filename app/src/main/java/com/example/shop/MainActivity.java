@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private Intent intent;
     private Intent typeIntent;
     private ImageView barcodeImageView;
+    private SMSsender smSsender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         listView=(ListView)findViewById(R.id.listView);
         listView2=(ListView)findViewById(R.id.listView2);
 
+        smSsender=new SMSsender();
         list = new ArrayList<>();
         list2 = new ArrayList<>();
         Log.v(TAG,"Ha ina hohiray");
@@ -740,6 +742,8 @@ public class MainActivity extends AppCompatActivity {
             typeIntent.putExtra("ip",intent.getStringExtra("ip"));
             typeIntent.putExtra("asosId",intent.getIntExtra("asosId",0));
             typeIntent.putExtra("type",intent.getIntExtra("type",0));
+//            boolean x=smSsender.smsSend("998999671042","ha");
+//            Log.v("sms",x+"");
             startActivity(typeIntent);
             finish();
         }

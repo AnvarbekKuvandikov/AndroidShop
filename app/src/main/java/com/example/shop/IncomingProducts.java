@@ -61,8 +61,7 @@ public class IncomingProducts extends AppCompatActivity {
     private Integer dillerId;
     private ImageView save;
     private Integer newAsosCheck;
-
-
+    private Button next;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +75,7 @@ public class IncomingProducts extends AppCompatActivity {
         incomingDollar=findViewById(R.id.incoming_dollar);
         listView=findViewById(R.id.incoming_ac_list);
         save=findViewById(R.id.incoming_save);
+        next=findViewById(R.id.incoming_add_product_next);
         intent=getIntent();
         thisUser=(User)intent.getSerializableExtra("user");
         ip=intent.getStringExtra("ip");
@@ -130,10 +130,12 @@ public class IncomingProducts extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 asos=modellList.get(position);
                 Integer index =dillerListId.indexOf(asos.getDilerId());
-                incomingdiller.setSelection(index);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    dillerId=dillerListId.get(index);
-                    incomingdiller.setText(incomingdiller.getAdapter().getItem(index).toString(), false);
+                if (index.equals(null) && index.equals(-1)) {
+                    incomingdiller.setSelection(index);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        dillerId = dillerListId.get(index);
+                        incomingdiller.setText(incomingdiller.getAdapter().getItem(index).toString(), false);
+                    }
                 }
                 // your code here
             }
@@ -143,6 +145,14 @@ public class IncomingProducts extends AppCompatActivity {
                 // your code here
             }
 
+        });
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent nextIntent=new Intent(IncomingProducts.this,IncomingAdd.class);
+                setDownIntent(nextIntent);
+                startActivity(nextIntent);
+            }
         });
 
         modellList=new ArrayList<>();
@@ -183,7 +193,7 @@ public class IncomingProducts extends AppCompatActivity {
 
     private void copyProperties(AsosModell asosBefore,AsosModell asosLast) {
         if (newAsosCheck==0){
-        asosBefore.setId(asosLast.getId());
+            asosBefore.setId(asosLast.getId());
         }
         asosBefore.setUserId(asosLast.getUserId());
         asosBefore.setDollar(asosLast.getDollar());
