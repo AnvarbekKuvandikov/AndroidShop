@@ -288,7 +288,7 @@ public class IncomingAdd extends AppCompatActivity {
         Integer retVal;
         try {
             retVal = Integer.parseInt((String) obj);
-        } catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) { 
             retVal = 0; // or null if that is your preference
         }
         return retVal;
