@@ -48,9 +48,11 @@ public class IncomingAdd extends AppCompatActivity {
     private String ip;
     private User thisuUser;
     private Integer asosId;
+    private AsosModell asos;
     private STovar tovar;
     private Product selectProduct;
     private ImageView save;
+    private ImageView cansel;
     private static Integer selectedProduct=0;
     private EditText count;
     private EditText incount;
@@ -68,27 +70,28 @@ public class IncomingAdd extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         save=findViewById(R.id.product_incoming_add_save);
-        count=findViewById(R.id.product_incoming_add_price_product_count);
-        incount=findViewById(R.id.product_incoming_add_price_inproduct_count);
+        cansel=findViewById(R.id.product_incoming_add_calsel);
+        count=(EditText)findViewById(R.id.product_incoming_add_price_product_count);
+        incount=(EditText)findViewById(R.id.product_incoming_add_price_inproduct_count);
         barcodescan=findViewById(R.id.product_incoming_add_barcodescan);
         listView=findViewById(R.id.product_incoming_add_list_view);
         listView2=findViewById(R.id.product_incoming_add_list_view2);
         searchView=findViewById(R.id.product_incoming_add_searchView);
         intent=getIntent();
-        main_changed1=findViewById(R.id.linerLayout1);
-        main_changed2=findViewById(R.id.linerLayout2);
-        selectProductView=findViewById(R.id.select_product);
-        /*intent.putExtra("ip","192.168.43.52");
+        main_changed1=findViewById(R.id.product_incoming_add_linerLayout1);
+        main_changed2=findViewById(R.id.product_incoming_add_linerLayout2);
+        selectProductView=findViewById(R.id.product_incoming_add_select_product);
+       /* intent.putExtra("ip","192.168.43.52");
         User user=new User();
         user.setId(30);
         user.setUsername("K.Begiev");
         user.setClientId(3);
         user.setDelFlag(0);
         intent.putExtra("user",user);
-        intent.putExtra("asosId",1821);
-*/
+        intent.putExtra("asosId",1821);*/
         ip=intent.getStringExtra("ip");
         asosId=intent.getIntExtra("asosId",0);
+        asos=(AsosModell)intent.getSerializableExtra("asos");
         thisuUser=(User) intent.getSerializableExtra("user");
         list=new ArrayList<>();
         list2=new ArrayList<>();
@@ -119,14 +122,29 @@ public class IncomingAdd extends AppCompatActivity {
                 if (stovar != null){
                     tovar=stovar;
                     selectedProduct=1;
+                    adapter.setPosition(i);
+                    adapter2.setPosition(-1);
+                    adapter.notifyDataSetChanged();
+                    adapter2.notifyDataSetChanged();
+                    selectProduct();
                     Log.v("MyTag",tovar.toString());
                 }
             }
         });
-        listView2.setOnClickListener(new View.OnClickListener() {
+        listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                product=(Product)view.getTag();
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Product product=(Product)view.getTag();
+                if (product != null){
+                    selectProduct=product;
+                    selectedProduct=2;
+                    adapter.setPosition(-1);
+                    adapter2.setPosition(i);
+                    adapter.notifyDataSetChanged();
+                    adapter2.notifyDataSetChanged();
+                    selectProduct();
+
+                }
             }
         });
         save.setOnClickListener(new View.OnClickListener() {
@@ -146,12 +164,36 @@ public class IncomingAdd extends AppCompatActivity {
                 selectProduct=product;
                 new AddProduct().execute();
                 list2.add(product);
-                Log.v("MyTag",product.toString());
+                Log.v("MyTag",selectProduct.toString());
                 Log.v("MyTag",list2.size()+"");
                 adapter2.notifyDataSetChanged();
-                selectedProduct=0;
-             }
+            }
         });
+        cansel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                selectedProduct=0;
+                                selectProduct();
+                                searchView.requestFocus();
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage("Сиз ростан хам бекор қилишни истайсизми?").setPositiveButton("Ха", dialogClickListener)
+                        .setNegativeButton("Йўқ", dialogClickListener).show();
+            }
+        });
+
+
 
     }
 
@@ -234,29 +276,45 @@ public class IncomingAdd extends AppCompatActivity {
 
 
     private void selectProduct() {
-        if(selectedProduct!=0){
-            if(selectProduct.getIncnt().equals(1) && tovar.getKol_in().equals(1)){
-                count.setEnabled(false);
-            }
-            else{
-                incount.setEnabled(true);
-            }
-            if (selectedProduct==2){
-                main_changed1.setBackgroundResource(R.drawable.backgroun3ch);
-                main_changed2.setBackgroundResource(R.drawable.backgroun3ch);
-                if(product.getCount()>0){
-                    CharSequence c=""+product.getCount();
-                    count.setText(c,EditText.BufferType.EDITABLE);
+        if(selectedProduct!=0) {
+
+            if (selectedProduct==1) {
+                if (tovar.getKol_in().equals(1) || tovar.getKol_in().equals(null)) {
+                    incount.setEnabled(false);
+                } else {
+                    incount.setEnabled(true);
                 }
-                if(product.getIncount()>0){
-                    CharSequence c=""+product.getIncount();
-                    incount.setText(c,EditText.BufferType.EDITABLE);
-                }
-            }
-            else{
+
+                selectProductView.setText(tovar.getNom());
                 main_changed1.setBackgroundResource(R.drawable.backgroun4ch);
                 main_changed2.setBackgroundResource(R.drawable.backgroun4ch);
             }
+
+            if (selectedProduct==2){
+                Product pr=new Product();
+                copyProperties(pr,selectProduct);
+                product=pr;
+                if (product.getIncnt().equals(1) ||  product.getIncnt().equals(null)) {
+                    incount.setEnabled(false);
+                } else {
+                    incount.setEnabled(true);
+                }
+                selectProductView.setText(product.getName());
+                main_changed1.setBackgroundResource(R.drawable.backgroun3ch);
+                main_changed2.setBackgroundResource(R.drawable.backgroun3ch);
+                Log.v("MyTag",selectProduct.toString());
+                if(product.getCount()>0){
+                    CharSequence c=""+product.getCount();
+                    count.setText(c,EditText.BufferType.EDITABLE);
+                    Log.v("MyEdit1",""+selectProduct.getCount() );
+                }
+                if(selectProduct.getIncount()>0){
+                    CharSequence c=""+selectProduct.getIncount();
+                    incount.setText(c,EditText.BufferType.EDITABLE);
+                    Log.v("MyEdit2",""+product.getIncount());
+                }
+            }
+
         }
         else{
             selectProductView.setText(R.string.product);
@@ -288,7 +346,7 @@ public class IncomingAdd extends AppCompatActivity {
         Integer retVal;
         try {
             retVal = Integer.parseInt((String) obj);
-        } catch (NumberFormatException nfe) { 
+        } catch (NumberFormatException nfe) {
             retVal = 0; // or null if that is your preference
         }
         return retVal;
@@ -296,7 +354,7 @@ public class IncomingAdd extends AppCompatActivity {
 
 
     private class AddProduct extends AsyncTask<Void,Void,Void>{
-        String urlRequest="http://"+ip+":8080/application/json/asosslave2/asosid="+asosId+"/userid="+thisuUser.getId();
+        String urlRequest="http://"+ip+":8080/application/json/asosslave2/asosid="+asos.getId()+"/userid="+thisuUser.getId();
         Integer i=0;
         @Override
         protected void onPreExecute() {
@@ -332,7 +390,7 @@ public class IncomingAdd extends AppCompatActivity {
     private class GetProducts extends AsyncTask<Void, Void, Void> {
         //        http://localhost:8080/application/json/clientid=4/4/products
         private String urlProducts="http://"+ip+":8080/application/json/getproduct/clientid="+thisuUser.getClientId();
-        private String urlAddProducts="http://"+ip+":8080/application/json/asosid="+ asosId +"/products";
+        private String urlAddProducts="http://"+ip+":8080/application/json/asosid="+ asos.getId() +"/products";
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -386,7 +444,6 @@ public class IncomingAdd extends AppCompatActivity {
                         tovar.setSena_d(object.getDouble("sena_d"));
                         tovar.setSena_in_d(object.getDouble("sena_in_d"));
                         list.add(tovar);
-
                     }
                 } catch (final JSONException e) {
                     Log.v("MyTag2", e.getMessage());
@@ -438,7 +495,7 @@ public class IncomingAdd extends AppCompatActivity {
 
                     }
                 } catch (JSONException e) {
-                   e.getMessage();
+                    e.getMessage();
                 }
 
             }
@@ -463,9 +520,10 @@ public class IncomingAdd extends AppCompatActivity {
             }
             adapter=new STovarAdapter(IncomingAdd.this,R.layout.stovar_item, list);
             listView.setAdapter(adapter);
-            adapter2 = new ItemAdapter(IncomingAdd.this, R.layout.list_item,list2,ip,asosId);
+            adapter2 = new ItemAdapter(IncomingAdd.this, R.layout.list_item,list2,ip,asos.getId());
             listView2.setAdapter(adapter2);
         }
+
     }
 
 

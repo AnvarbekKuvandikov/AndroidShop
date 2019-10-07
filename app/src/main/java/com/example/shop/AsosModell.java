@@ -1,6 +1,7 @@
 package com.example.shop;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class AsosModell implements Serializable {
     private Integer id;
@@ -19,10 +20,19 @@ public class AsosModell implements Serializable {
     private Double summa;
     private Integer kol;
     private Integer sotuv_turi;
+    private Diller diller;
 
     public AsosModell() {
     }
 
+
+    public Diller getDiller() {
+        return diller;
+    }
+
+    public void setDiller(Diller diller) {
+        this.diller = diller;
+    }
 
     public String getNomer() {
         return nomer;
@@ -173,6 +183,29 @@ public class AsosModell implements Serializable {
                 ", summa=" + summa +
                 ", kol=" + kol +
                 ", sotuv_turi=" + sotuv_turi +
+                ", diller=" + diller.toString() +
                 '}';
+    }
+
+    public String toString2() {
+        return "AsosModell{" +
+                "id=" + id +
+                ", clientId=" + clientId +
+                ", userId=" + userId +
+                ", xodimId=" + xodimId +
+                ", haridorId=" + haridorId +
+                ", dilerId=" + dilerId +
+                ", turOper=" + turOper +
+                ", sana='" + sana + '\'' +
+                ", nomer='" + nomer + '\'' +
+                ", del_flag=" + del_flag +
+                ", dollar=" + dollar +
+                ", kurs=" + kurs +
+                ", sum_d=" + sum_d +
+                ", summa=" + summa +
+                ", kol=" + kol +
+                ", sotuv_turi=" + sotuv_turi +
+                ", diller=null"+
+        '}';
     }
 }

@@ -27,7 +27,6 @@
         <activity android:name=".IncomingAdd"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-
         </activity>
         <activity
             android:name=".IncomingProducts"

@@ -55,7 +55,7 @@
         android:layout_marginBottom="4dp" />
 
     <LinearLayout
-        android:id="@+id/linerLayout1"
+        android:id="@+id/product_incoming_add_linerLayout1"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:orientation="horizontal"
@@ -64,7 +64,7 @@
         >
 
         <TextView
-            android:id="@+id/select_product"
+            android:id="@+id/product_incoming_add_select_product"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:text="@string/product"
@@ -73,7 +73,7 @@
             android:textSize="18sp" />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/linerLayout2"
+        android:id="@+id/product_incoming_add_linerLayout2"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
