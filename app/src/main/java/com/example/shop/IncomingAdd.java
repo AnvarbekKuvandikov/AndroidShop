@@ -162,11 +162,13 @@ public class IncomingAdd extends AppCompatActivity {
                 product.setInprice(0.0);
                 product.setIncnt(tovar.getKol_in());
                 selectProduct=product;
-                new AddProduct().execute();
-                list2.add(product);
+                addList(selectProduct);
                 Log.v("MyTag",selectProduct.toString());
                 Log.v("MyTag",list2.size()+"");
                 adapter2.notifyDataSetChanged();
+                selectedProduct=0;
+                selectProduct();
+                new AddProduct().execute();
             }
         });
         cansel.setOnClickListener(new View.OnClickListener() {
@@ -195,6 +197,43 @@ public class IncomingAdd extends AppCompatActivity {
 
 
 
+    }
+
+    private void addList(Product product){
+        int index=-1;
+        for (int i = 0; i < list2.size(); i++) {
+            if(list2.get(i).getId().equals(product.getId()) && list2.get(i).getPrice().equals(product.getPrice()) && list2.get(i).getInprice().equals(product.getInprice()) ){
+                index=i;
+                Log.v("MyLog","Index:"+index);
+                break;
+            }
+        }
+        if(index==-1){
+            Product pr=new Product() ;
+            copyProperties(pr,product);
+            list2.add(pr);
+        }
+        else{
+            Integer setCount;
+            Integer setInCount;
+            if(selectedProduct.equals(2)){
+                setCount = ( product.getCount() * product.getIncnt() + + product.getIncount() ) / product.getIncnt();
+                setInCount = (product.getCount() * product.getIncnt() +product.getIncount() ) % product.getIncnt();
+
+            }
+            else {
+                setCount = ((list2.get(index).getCount() + product.getCount()) * product.getIncnt() + (list2.get(index).getIncount() + product.getIncount())) / product.getIncnt();
+                setInCount = ((list2.get(index).getCount() + product.getCount()) * product.getIncnt() + (list2.get(index).getIncount() + product.getIncount())) % product.getIncnt();
+            }
+            list2.get(index).setPutId(product.getPutId());
+            list2.get(index).setCount(setCount);
+            list2.get(index).setIncount(setInCount);
+            Log.v("MyLog","pr:"+product.toString());
+
+            for (int i = 0; i < list2.size(); i++) {
+                Log.v("MyLog","list2 exam:"+list2.get(i).toString());
+            }
+        }
     }
 
     public void showSoftKeyboard(View view) {

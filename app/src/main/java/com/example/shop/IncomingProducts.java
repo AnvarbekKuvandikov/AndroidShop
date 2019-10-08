@@ -39,23 +39,24 @@ import java.util.Calendar;
 import java.util.List;
 
 public class IncomingProducts extends AppCompatActivity {
-    DatePickerDialog picker;
-    EditText incomingDate;
-    EditText incomingNum;
-    AutoCompleteTextView incomingdiller;
-    CheckBox incomingDollar;
-    Spinner listView;
-    List<CharSequence> list;
-    List<Diller> dillerList;
+    private DatePickerDialog picker;
+    private EditText incomingDate;
+    private EditText incomingNum;
+    private AutoCompleteTextView incomingdiller;
+    private CheckBox incomingDollar;
+    private Spinner listView;
+    private List<CharSequence> list;
+    private List<Diller> dillerList;
 
-    List<AsosModell> modellList;
-    List<String> listAsos;
-    ArrayAdapter<String> adapterdillers;
-    ArrayAdapter<CharSequence> adapter;
-    ProgressDialog progressDialog;
-    User thisUser;
-    String ip;
-    Intent intent;
+    private List<AsosModell> modellList;
+    private List<String> listAsos;
+    private ArrayAdapter<String> adapterdillers;
+    private ArrayAdapter<CharSequence> adapter;
+    private List<String> dillerNames;
+    private ProgressDialog progressDialog;
+    private User thisUser;
+    private String ip;
+    private Intent intent;
     private AsosModell asos;
     private AsosModell inserAsos;
     private Integer dillerId;
@@ -64,7 +65,6 @@ public class IncomingProducts extends AppCompatActivity {
     private ImageView clear;
     private Integer newAsosCheck;
     private Button next;
-    private List<String> dillerNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +99,7 @@ public class IncomingProducts extends AppCompatActivity {
         asos.setDilerId(0);
         asos.setSumma(0.0);
         asos.setSotuv_turi(1);
-        asos.setNomer("0");
+        asos.setNomer("");
         asos.setDollar(1);
         asos.setKurs(0.0);
         asos.setSum_d(0.0);
@@ -329,6 +329,7 @@ public class IncomingProducts extends AppCompatActivity {
             progressDialog.setMessage("Малумот юкланяпти");
             progressDialog.setCancelable(false);
             progressDialog.show();
+            list.clear();
         }
         @Override
         protected Void doInBackground(Void... voids) {
@@ -355,7 +356,7 @@ public class IncomingProducts extends AppCompatActivity {
                     jsonAsosStr=httpHandler.makeServiceCreate(urlGetAsoss,asos);
                 }
                 else {
-                    jsonAsosStr=httpHandler.makeServiceCreate(urlNewAsos,inserAsos);
+                       jsonAsosStr=httpHandler.makeServiceCreate(urlNewAsos,inserAsos);
                 }
 
                 if(jsonDillersStr != null) {
@@ -465,15 +466,17 @@ public class IncomingProducts extends AppCompatActivity {
             super.onPostExecute(aVoid);
             for (int i=0;i<modellList.size();i++){
                 Integer id=modellList.get(i).getDilerId();
+                Log.v("MyTag3","id:"+id);
+                CharSequence x;
                 if (id>0){
                     modellList.get(i).setDiller(getDiller(id));
-                    CharSequence x="Таминотчи:"+modellList.get(i).getDiller().getName()+ ", Сумма: "+modellList.get(i).getSumma();
+                    x="Таминотчи:"+modellList.get(i).getDiller().getName()+ ", Сумма: "+modellList.get(i).getSumma();
 //                    CharSequence x="id"+id+","+modellList.get(i).getDiller().getId()+" : "+modellList.get(i).getId();
-                    list.add(x);
                 }
                 else {
-                    CharSequence x="Таминотчи: Мавжуд емас, Сумма: "+modellList.get(i).getSumma();
+                    x="Таминотчи: Мавжуд емас, Сумма: "+modellList.get(i).getSumma();
                 }
+                list.add(x);
                 adapter.notifyDataSetChanged();
             }
             if(progressDialog.isShowing()){

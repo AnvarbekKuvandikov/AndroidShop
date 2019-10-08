@@ -176,6 +176,7 @@ public class ProductsList extends AppCompatActivity {
         nextIntent.putExtra("sumprice",intent.getStringExtra("sumprice"));
         nextIntent.putExtra("stovar",intent.getSerializableExtra("stovar"));
     }
+
     private class GetProducts extends AsyncTask<Void, Void, Void> {
         //        http://localhost:8080/application/json/clientid=4/4/products
         private String urlProducts="http://"+ip+":8080/application/json/getproduct/clientid="+thisuUser.getClientId();
