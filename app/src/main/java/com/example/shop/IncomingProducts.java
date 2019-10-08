@@ -92,7 +92,7 @@ public class IncomingProducts extends AppCompatActivity {
         asos.setClientId(thisUser.getClientId());
         asos.setUserId(thisUser.getId());
         asos.setDel_flag(1);
-        asos.setTurOper(2);
+        asos.setTurOper(1);
         asos.setXodimId(thisUser.getId());
         asos.setHaridorId(0);
         asos.setSana("");
@@ -137,7 +137,6 @@ public class IncomingProducts extends AppCompatActivity {
                 }
                 asos.setDollar(check);
                 copyProperties(inserAsos,asos);
-                new getDiller().execute();
 
             }
         });

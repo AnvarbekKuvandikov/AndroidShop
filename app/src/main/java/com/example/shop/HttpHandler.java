@@ -74,6 +74,7 @@ public class HttpHandler {
 
             Log.v("Http",asosModell.getUserId()+"");
             JSONObject jsonParam = new JSONObject();
+            jsonParam.put("id", asosModell.getId());
             jsonParam.put("clientId", asosModell.getClientId());
             jsonParam.put("userId", asosModell.getUserId());
             jsonParam.put("xodimId", asosModell.getXodimId());
@@ -87,6 +88,7 @@ public class HttpHandler {
             jsonParam.put("dollar", asosModell.getDollar());
             jsonParam.put("kurs", asosModell.getKurs());
             jsonParam.put("sum_d", asosModell.getSum_d());
+            jsonParam.put("kol", asosModell.getKol());
              /*{
 
                     "clientId": 4,
