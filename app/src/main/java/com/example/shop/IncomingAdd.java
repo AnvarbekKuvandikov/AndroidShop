@@ -153,20 +153,25 @@ public class IncomingAdd extends AppCompatActivity {
                 Integer price_product_count_int=tryParse(count.getText().toString());
                 Integer price_inproduct_count_int=tryParse(incount.getText().toString());
                 Product product=new Product();
-                product.setPutId(0);
-                product.setId(tovar.getId());
-                product.setName(tovar.getNom());
                 product.setCount(price_product_count_int);
                 product.setIncount(price_inproduct_count_int);
-                product.setPrice(tovar.getSotish());
                 product.setInprice(0.0);
-                product.setIncnt(tovar.getKol_in());
-                selectProduct=product;
-                addList(selectProduct);
+                if (selectedProduct==1){
+                    product.setPutId(0);
+                    product.setId(tovar.getId());
+                    product.setName(tovar.getNom());
+                    product.setPrice(tovar.getSotish());
+                    product.setIncnt(tovar.getKol_in());
+                    selectProduct=product;
+                }
+                else {
+                    selectProduct.setCount(price_product_count_int);
+                    selectProduct.setIncount(price_inproduct_count_int);
+                }
+
                 Log.v("MyTag",selectProduct.toString());
                 Log.v("MyTag",list2.size()+"");
                 adapter2.notifyDataSetChanged();
-                selectedProduct=0;
                 selectProduct();
                 new AddProduct().execute();
             }
@@ -420,6 +425,10 @@ public class IncomingAdd extends AppCompatActivity {
             }
             if(i!=0)
                 selectProduct.setPutId(i);
+            if (selectedProduct==1){
+                addList(selectProduct);
+            }
+            selectedProduct=0;
 
         }
 
