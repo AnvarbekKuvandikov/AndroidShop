@@ -65,6 +65,7 @@ public class IncomingProducts extends AppCompatActivity {
     private ImageView clear;
     private Integer newAsosCheck;
     private Button next;
+    private Integer pos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,22 +90,7 @@ public class IncomingProducts extends AppCompatActivity {
         newAsosCheck=0;
 
         asos=new AsosModell();
-        asos.setClientId(thisUser.getClientId());
-        asos.setUserId(thisUser.getId());
-        asos.setDel_flag(1);
-        asos.setTurOper(1);
-        asos.setXodimId(thisUser.getId());
-        asos.setHaridorId(0);
-        asos.setSana("");
-        asos.setDilerId(0);
-        asos.setSumma(0.0);
-        asos.setSotuv_turi(1);
-        asos.setNomer("");
-        asos.setDollar(1);
-        asos.setKurs(0.0);
-        asos.setSum_d(0.0);
-        asos.setKol(0);
-
+        newProperties(asos);
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,7 +123,7 @@ public class IncomingProducts extends AppCompatActivity {
                 }
                 asos.setDollar(check);
                 copyProperties(inserAsos,asos);
-
+                new Put().execute();
             }
         });
         incomingdiller.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -154,9 +140,9 @@ public class IncomingProducts extends AppCompatActivity {
         listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                  Log.v("MyTag",list.get(position).toString());
-                  newAsosCheck=0;
-                  setSeleection(position);
+                Log.v("MyTag",list.get(position).toString());
+                newAsosCheck=0;
+                setSeleection(position);
 
                 // your code here
             }
@@ -214,6 +200,7 @@ public class IncomingProducts extends AppCompatActivity {
     }
 
     private void setSeleection(Integer position) {
+        pos=position;
         asos=modellList.get(position);
         listView.setSelection(position);
         incomingDate.setText(asos.getSana(), TextView.BufferType.EDITABLE);
@@ -222,16 +209,37 @@ public class IncomingProducts extends AppCompatActivity {
             incomingdiller.setText((CharSequence) asos.getDiller().getName(),TextView.BufferType.EDITABLE);
         }
         if (asos.getDollar().equals(1)){
-           incomingDollar.setChecked(true);
+            incomingDollar.setChecked(true);
         }
         else {
-           incomingDollar.setChecked(false);
+            incomingDollar.setChecked(false);
         }
     }
 
+    private void newProperties(AsosModell asosBefore){
+        asosBefore.setId(0);
+        asosBefore.setClientId(thisUser.getClientId());
+        asosBefore.setUserId(thisUser.getId());
+        asosBefore.setDollar(0);
+        asosBefore.setDel_flag(1);
+        asosBefore.setTurOper(1);
+        asosBefore.setXodimId(thisUser.getId());
+        asosBefore.setHaridorId(0);
+        asosBefore.setSana("");
+        asosBefore.setDilerId(0);
+        asosBefore.setSumma(0.0);
+        asosBefore.setSotuv_turi(1);
+        asosBefore.setNomer("");
+        asosBefore.setKurs(0.0);
+        asosBefore.setSum_d(0.0);
+        asosBefore.setKol(0);
+    }
     private void copyProperties(AsosModell asosBefore,AsosModell asosLast) {
         if (newAsosCheck==0){
             asosBefore.setId(asosLast.getId());
+        }
+        else {
+            asosBefore.setId(0);
         }
         asosBefore.setUserId(asosLast.getUserId());
         asosBefore.setDollar(asosLast.getDollar());
@@ -328,7 +336,6 @@ public class IncomingProducts extends AppCompatActivity {
             progressDialog.setMessage("Малумот юкланяпти");
             progressDialog.setCancelable(false);
             progressDialog.show();
-            list.clear();
         }
         @Override
         protected Void doInBackground(Void... voids) {
@@ -355,7 +362,7 @@ public class IncomingProducts extends AppCompatActivity {
                     jsonAsosStr=httpHandler.makeServiceCreate(urlGetAsoss,asos);
                 }
                 else {
-                       jsonAsosStr=httpHandler.makeServiceCreate(urlNewAsos,inserAsos);
+                    jsonAsosStr=httpHandler.makeServiceCreate(urlNewAsos,inserAsos);
                 }
 
                 if(jsonDillersStr != null) {
@@ -406,6 +413,7 @@ public class IncomingProducts extends AppCompatActivity {
                             JSONObject object = jsonArray.getJSONObject(i);
                             AsosModell modell=new AsosModell();
                             modell.setId(object.getInt("id"));
+                            modell.setUserId(object.getInt("userId"));
                             modell.setClientId(object.getInt("clientId"));
                             modell.setXodimId(object.getInt("xodimId"));
                             modell.setHaridorId(object.getInt("haridorId"));
@@ -419,7 +427,7 @@ public class IncomingProducts extends AppCompatActivity {
                             modell.setDollar(object.getInt("dollar"));
                             modell.setKurs(tryParseDouble(object.getString("kurs")));
                             modell.setSum_d(tryParseDouble(object.getString("sum_d")));
-//                            modell.setKol(object.getInt("kol"));
+                            modell.setKol(object.getInt("kol"));
                             Log.v("MyTag2",modell.getId()+"");
                             /*{
                                 "id": 1782,
@@ -483,6 +491,141 @@ public class IncomingProducts extends AppCompatActivity {
             }
             newAsosCheck=0;
             setSeleection(modellList.size()-1);
+        }
+        public Diller getDiller(Integer dillerId){
+            for (int i=0;i<dillerList.size();i++){
+                if (dillerList.get(i).getId().equals(dillerId))
+                    return dillerList.get(i);
+            }
+            return null;
+        }
+
+    }
+
+
+    class Put extends AsyncTask<Void,Void,Void>{
+
+
+        HttpHandler httpHandler=new HttpHandler();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog=new ProgressDialog(IncomingProducts.this);
+            progressDialog.setMessage("Малумот юкланяпти");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if (thisUser.getId()!=null) {
+//
+                String urlNewAsos = "http://" + ip + ":8080/application/json/newasos";
+
+
+                String jsonAsosStr=httpHandler.makeServiceCreate(urlNewAsos,inserAsos);
+                Log.v("MyTag",inserAsos.toString2());
+
+                if (jsonAsosStr != null){
+                    try {
+
+                            JSONObject object = new JSONObject(jsonAsosStr);
+                            AsosModell modell=new AsosModell();
+                            modell.setId(object.getInt("id"));
+                            modell.setUserId(object.getInt("userId"));
+                            modell.setClientId(object.getInt("clientId"));
+                            modell.setXodimId(object.getInt("xodimId"));
+                            modell.setHaridorId(object.getInt("haridorId"));
+                            modell.setSana(object.getString("sana"));
+                            modell.setDilerId(object.getInt("dilerId"));
+                            modell.setTurOper(object.getInt("turOper"));
+                            modell.setSumma(tryParseDouble(object.getString("summa")));
+                            modell.setSotuv_turi(object.getInt("sotuvTuri"));
+                            modell.setNomer(object.getString("nomer"));
+                            modell.setDel_flag(object.getInt("del_flag"));
+                            modell.setDollar(object.getInt("dollar"));
+                            modell.setKurs(tryParseDouble(object.getString("kurs")));
+                            modell.setSum_d(tryParseDouble(object.getString("sum_d")));
+                            modell.setKol(object.getInt("kol"));
+                            Log.v("MyTag2",modell.getId()+"");
+                            /*{
+                                "id": 1782,
+                                    "clientId": 4,
+                                    "userId": 30,
+                                    "xodimId": 99,
+                                    "haridorId": 1,
+                                    "sana": "2019-09-18",
+                                    "dilerId": 0,
+                                    "turOper": 2,
+                                    "summa": 4500,
+                                    "sotuvTuri": 1,
+                                    "nomer": null,
+                                    "del_flag": 1,
+                                    "dollar": null,
+                                    "kurs": null,
+                                    "sum_d": null,
+                                    "kol": null
+                            }*/
+                            if (newAsosCheck==0){
+                                modellList.add(modell);
+                            }
+                            else {
+                                modellList.set(pos,modell);
+                            }
+
+
+                    } catch (final JSONException e) {
+                        Log.v("MyTag2", e.getMessage());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(IncomingProducts.this, "Хатолик юз берди", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                }
+
+
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Integer i;
+            if (newAsosCheck==0){
+                i=modellList.size()-1;
+            }
+            else {
+                i =pos;
+            }
+            Integer id=modellList.get(i).getDilerId();
+            Log.v("MyTag3","id:"+id);
+            CharSequence x;
+            if (id>0){
+                modellList.get(i).setDiller(getDiller(id));
+                x="Таминотчи:"+modellList.get(i).getDiller().getName()+ ", Сумма: "+modellList.get(i).getSumma();
+//                    CharSequence x="id"+id+","+modellList.get(i).getDiller().getId()+" : "+modellList.get(i).getId();
+            }
+            else {
+                x="Таминотчи: Мавжуд емас, Сумма: "+modellList.get(i).getSumma();
+            }
+            if (newAsosCheck==0){
+                list.add(x);
+            }
+            else {
+                list.set(i,x);
+            }
+
+            adapter.notifyDataSetChanged();
+
+            if(progressDialog.isShowing()){
+                progressDialog.dismiss();
+            }
+            newAsosCheck=0;
+            setSeleection(i);
         }
         public Diller getDiller(Integer dillerId){
             for (int i=0;i<dillerList.size();i++){

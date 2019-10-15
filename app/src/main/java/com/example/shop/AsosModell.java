@@ -205,7 +205,7 @@ public class AsosModell implements Serializable {
                 ", summa=" + summa +
                 ", kol=" + kol +
                 ", sotuv_turi=" + sotuv_turi +
-                ", diller=null"+
+                ", diller="+dilerId+
         '}';
     }
 }

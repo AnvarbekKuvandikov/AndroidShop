@@ -82,6 +82,7 @@ public class HttpHandler {
             jsonParam.put("sana", asosModell.getSana());
             jsonParam.put("dilerId", asosModell.getDilerId());
             jsonParam.put("turOper", asosModell.getTurOper());
+            jsonParam.put("summa", asosModell.getSumma());
             jsonParam.put("sotuvTuri", asosModell.getSotuv_turi());
             jsonParam.put("nomer", asosModell.getNomer());
             jsonParam.put("del_flag", asosModell.getDel_flag());
@@ -89,6 +90,7 @@ public class HttpHandler {
             jsonParam.put("kurs", asosModell.getKurs());
             jsonParam.put("sum_d", asosModell.getSum_d());
             jsonParam.put("kol", asosModell.getKol());
+
              /*{
 
                     "clientId": 4,
