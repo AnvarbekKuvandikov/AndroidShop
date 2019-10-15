@@ -567,10 +567,10 @@ public class IncomingProducts extends AppCompatActivity {
                                     "kol": null
                             }*/
                             if (newAsosCheck==0){
-                                modellList.add(modell);
+                                modellList.set(pos,modell);
                             }
                             else {
-                                modellList.set(pos,modell);
+                                modellList.add(modell);
                             }
 
 
@@ -596,10 +596,10 @@ public class IncomingProducts extends AppCompatActivity {
             super.onPostExecute(aVoid);
             Integer i;
             if (newAsosCheck==0){
-                i=modellList.size()-1;
+                i=pos;
             }
             else {
-                i =pos;
+                i=modellList.size()-1;
             }
             Integer id=modellList.get(i).getDilerId();
             Log.v("MyTag3","id:"+id);
@@ -613,10 +613,10 @@ public class IncomingProducts extends AppCompatActivity {
                 x="Таминотчи: Мавжуд емас, Сумма: "+modellList.get(i).getSumma();
             }
             if (newAsosCheck==0){
-                list.add(x);
+                list.set(i,x);
             }
             else {
-                list.set(i,x);
+                list.add(x);
             }
 
             adapter.notifyDataSetChanged();
