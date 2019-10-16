@@ -99,25 +99,25 @@ public class TypeChangeActivity extends AppCompatActivity {
 
     }
 
+
+
     @Override
     public void onBackPressed() {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        finish();
-                        break;
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        break;
-                }
-            }
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(TypeChangeActivity.this);
-        builder.setMessage("Дастурдан чикишни истайсизми?").setPositiveButton("Ха", dialogClickListener)
-                .setNegativeButton("Йўқ", dialogClickListener).show();
+        Intent nextInten=new Intent(TypeChangeActivity.this,IncomingWork.class);
+        setDownIntent(nextInten);
+        startActivity(nextInten);
+        finish();
     }
+
+    public void setDownIntent(Intent nextIntent) {
+        nextIntent.putExtra("user",mainIntent.getSerializableExtra("user"));
+        nextIntent.putExtra("ip",mainIntent.getStringExtra("ip"));
+        nextIntent.putExtra("asosId",mainIntent.getIntExtra("asosId",0));
+        nextIntent.putExtra("type",mainIntent.getIntExtra("type",0));
+        nextIntent.putExtra("sumprice",mainIntent.getStringExtra("sumprice"));
+        nextIntent.putExtra("stovar",mainIntent.getSerializableExtra("stovar"));
+    }
+
 
    /* private void saveAutoCompleteTextView(){
         android.content.SharedPreferences sPref = getPreferences(MODE_PRIVATE);
@@ -241,14 +241,9 @@ public class TypeChangeActivity extends AppCompatActivity {
             mainIntent.putExtra("type",type);
             mainIntent.putExtra("asosId",asosId);
             Log.v("MyLog3","mainIntent"+(Integer)mainIntent.getIntExtra("asosId",0));
-            Intent intent = new Intent(TypeChangeActivity.this, MainActivity.class);
-            intent.putExtra("user", mainIntent.getSerializableExtra("user"));
-            intent.putExtra("ip", mainIntent.getStringExtra("ip"));
-            intent.putExtra("asosId",mainIntent.getIntExtra("asosId",0));
-            intent.putExtra("type",mainIntent.getIntExtra("type",0));
-            intent.putExtra("sumprice",mainIntent.getStringExtra("sumprice"));
-
-            startActivity(intent);
+            Intent nextintent = new Intent(TypeChangeActivity.this, MainActivity.class);
+            setDownIntent(nextintent);
+            startActivity(nextintent);
             finish();
         }
     }

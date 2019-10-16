@@ -323,7 +323,13 @@ public class IncomingProducts extends AppCompatActivity {
         nextIntent.putExtra("stovar",intent.getSerializableExtra("stovar"));
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent nextInten=new Intent(IncomingProducts.this,IncomingWork.class);
+        setDownIntent(nextInten);
+        startActivity(nextInten);
+        finish();
+    }
 
     class getDiller extends AsyncTask<Void,Void,Void> {
 

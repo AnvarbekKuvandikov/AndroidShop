@@ -34,7 +34,8 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity android:name=".IncomingWork">
+        <activity android:name=".IncomingWork"
+            android:theme="@style/AppTheme">
 
         </activity>
         <activity

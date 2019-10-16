@@ -237,7 +237,7 @@ public class LoginActivity extends AppCompatActivity {
                 progressDialog.dismiss();
             }
             if (thisUser.getId()!=null) {
-                intent = new Intent(LoginActivity.this, TypeChangeActivity.class);
+                intent = new Intent(LoginActivity.this, IncomingWork.class);
                 intent.putExtra("user", thisUser);
                 intent.putExtra("ip", ipadress.getText().toString());
 //                intent.putExtra("asosId",asosId);

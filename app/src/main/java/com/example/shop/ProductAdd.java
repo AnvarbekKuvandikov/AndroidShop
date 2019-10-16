@@ -167,22 +167,10 @@ public class ProductAdd extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        finish();
-                        break;
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        break;
-                }
-            }
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(ProductAdd.this);
-        builder.setMessage("Дастурдан чикишни истайсизми?").setPositiveButton("Ха", dialogClickListener)
-                .setNegativeButton("Йўқ", dialogClickListener).show();
+        Intent nextInten=new Intent(ProductAdd.this,ProductsList.class);
+        setDownIntent(nextInten);
+        startActivity(nextInten);
+        finish();
     }
 
     public void setText(CharSequence sequence){
